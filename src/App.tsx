@@ -1,23 +1,10 @@
-import React from 'react'
-import { insertAccount } from 'api/account';
+import React from 'react';
+import { isMobile } from 'react-device-detect';
+import Browser from 'routes/Browser';
+import Mobile from 'routes/Mobile';
 
 function App() {
-
-  React.useEffect(() => {
-    async function test() {
-      const { data } = await insertAccount({
-        id: 123123131
-      });
-      console.log(data);
-    }
-    //test();
-  }, []);
-  
-  return (
-    <div className="App">
-      vite-app
-    </div>
-  )
+  return isMobile ? <Mobile /> : <Browser />;
 }
 
-export default App
+export default App;
