@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from 'components/mobile/login/Login';
+
+const Login = lazy(() => import('components/mobile/login/Login'));
 
 function Mobile() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/" component={Login} />
-      </Switch>
+      <Suspense fallback={<div>loading...</div>}>
+        <Switch>
+          <Route path="/" component={Login} />
+        </Switch>
+      </Suspense>
     </BrowserRouter>
   );
 }

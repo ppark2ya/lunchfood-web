@@ -1,32 +1,35 @@
 import React from 'react';
-import { getAddressList } from 'api/address';
-import { OPEN_API_ROAD_ADDRESS_KEY } from 'Constants';
-import queryString from 'query-string';
+import { KAKAO_API_KEY } from 'Constants';
+import KakaoLogin from 'react-kakao-login';
+import { getAccount } from 'api/account';
+
+async function asyncGetAccount() {
+  const { data } = await getAccount({ id: 1660286870 });
+  console.log(`getAccount res: `, data);
+}
 
 function Login() {
   React.useEffect(() => {
-    async function asyncGetAddressList() {
-      const param = {
-        confmKey: OPEN_API_ROAD_ADDRESS_KEY,
-        currentPage: 1,
-        countPerPage: 10,
-        keyword: '하안동',
-        // resultType: 'json',
-      };
-      // 'confmKey=U01TX0FVVEgyMDIxMDQxMDIxMzQyNzExMTAzNDU=&countPerPage=10&currentPage=1&keyword=하안동&resultType=json'
+    const kakaoMaps = window.kakao.maps;
+    const options = {
+      center: new kakaoMaps.LatLng(37.365264512305174, 127.10676860117488),
+      level: 3,
+    };
 
-      const data = await getAddressList({
-        param: queryString.stringify(param),
-        prefix: '',
-        name: 'jsonp',
-        timeout: 3000,
-      });
-      console.log(data);
-    }
-    asyncGetAddressList();
+    // const map = new kakaoMaps.Map(document.getElementById('map'), options);
+    asyncGetAccount();
   }, []);
 
-  return <div>Mobile Login</div>;
+  return (
+    <div>
+      <KakaoLogin
+        token={KAKAO_API_KEY}
+        onSuccess={(response) => console.log(response)}
+        onFail={(error) => console.error(error)}
+      />
+      <div id="map" style={{ width: '400px', height: '400px' }}></div>
+    </div>
+  );
 }
 
 export default Login;

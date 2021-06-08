@@ -1,28 +1,15 @@
+import apiClient from './apiClient';
 import { KOROAD_URL } from 'Constants';
-import jsonp from 'jsonp';
-import useJSONP from 'use-jsonp'; // https://github.com/Ieuanoh/use-jsonp
 
 const prefix = `${KOROAD_URL}/addrlink`;
 
-interface Options {
-  param?: string; // query string으로 넘겨줘야함
-  prefix?: string;
-  name?: string;
-  timeout?: number;
-}
 /**
  * @desc 주소지 조회
  * @param keyword: 검색어(String)
  */
-export function getAddressList(opts: Options) {
-  return new Promise(function (resolve, reject) {
-    jsonp(`${prefix}/addrLinkApiJsonp.do`, opts, function (err, data) {
-      if (err) {
-        reject(new Error(`addrLinkApiJsonp error! ${err.message}`));
-      } else {
-        resolve(data);
-      }
-    });
+export function getAddressList(params: any) {
+  return apiClient.get(`${prefix}/addrLinkApi.do`, {
+    params,
   });
 }
 
@@ -34,14 +21,8 @@ export function getAddressList(opts: Options) {
  * @param buldMnnm: 건물본번(Number)
  * @param buldSlno: 건물부번(Number)
  */
-export function getAddressCoord(opts: Options) {
-  return new Promise(function (resolve, reject) {
-    jsonp(`${prefix}/addrCoordApiJsonp.do`, opts, function (err, data) {
-      if (err) {
-        reject(new Error(`addrCoordApiJsonp error! ${err.message}`));
-      } else {
-        resolve(data);
-      }
-    });
+export function getAddressCoord(params: any) {
+  return apiClient.get(`${prefix}/addrCoordApi.do`, {
+    params,
   });
 }
