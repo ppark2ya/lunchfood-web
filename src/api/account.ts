@@ -1,23 +1,7 @@
 import apiClient from './apiClient';
-import { ApiResponse } from 'types/common';
+import { ApiResponse, Account } from './types';
 
 const prefix = '/account';
-interface Account {
-  id: number;
-  age?: string;
-  birthday?: string;
-  birthyear?: string;
-  gender?: string;
-  x?: string; // lon
-  y?: string; // lat
-  address?: string;
-  type?: string;
-  radius?: number;
-  radius_on?: number;
-  place_on?: number;
-  date_on?: number;
-  set_date?: number;
-}
 
 /**
  * @desc 회원가입

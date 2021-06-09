@@ -4,4 +4,5 @@ export const OPEN_API_ROAD_ADDRESS_KEY =
   'U01TX0FVVEgyMDIxMDQxMDIxMzQyNzExMTAzNDU=';
 export const OPEN_API_LOCATION_KEY = 'U01TX0FVVEgyMDIxMDQxMDIxMzExODExMTAzNDQ=';
 export const KAKAO_API_KEY = 'd70d97f9f2010b8441048ffccc59c48b';
+export const INTERVAL_DATE = 3;
 export const API_ERROR_MSG = '';

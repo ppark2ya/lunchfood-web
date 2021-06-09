@@ -17,7 +17,7 @@ function Login() {
     };
 
     // const map = new kakaoMaps.Map(document.getElementById('map'), options);
-    asyncGetAccount();
+    // asyncGetAccount();
   }, []);
 
   return (

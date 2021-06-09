@@ -1,14 +1,39 @@
 import apiClient from './apiClient';
-import { KOROAD_URL } from 'Constants';
+import { KOROAD_URL, OPEN_API_ROAD_ADDRESS_KEY } from 'Constants';
+import {
+  AddressApiResponse,
+  AddressCommonResult,
+  AddressRoadItem,
+  AddressCoordItem,
+} from './types';
 
 const prefix = `${KOROAD_URL}/addrlink`;
+
+export const defaultAddrParams = {
+  confmKey: OPEN_API_ROAD_ADDRESS_KEY,
+  currentPage: 1,
+  countPerPage: 10,
+  resultType: 'json',
+  keyword: '',
+};
 
 /**
  * @desc 주소지 조회
  * @param keyword: 검색어(String)
  */
-export function getAddressList(params: any) {
-  return apiClient.get(`${prefix}/addrLinkApi.do`, {
+export function getAddressList(params: {
+  confmKey: string;
+  currentPage: number;
+  countPerPage: number;
+  resultType: string;
+  keyword: string;
+}) {
+  return apiClient.get<
+    AddressApiResponse<{
+      common: AddressCommonResult;
+      juso: Array<AddressRoadItem>;
+    }>
+  >(`${prefix}/addrLinkApi.do`, {
     params,
   });
 }
@@ -21,8 +46,21 @@ export function getAddressList(params: any) {
  * @param buldMnnm: 건물본번(Number)
  * @param buldSlno: 건물부번(Number)
  */
-export function getAddressCoord(params: any) {
-  return apiClient.get(`${prefix}/addrCoordApi.do`, {
+export function getAddressCoord(params: {
+  confmKey: string;
+  admCd: string;
+  rnMgtSn: string;
+  udrtYn: string;
+  buldMnnm: number;
+  buldSlno: number;
+  roadAddr: string;
+}) {
+  return apiClient.get<
+    AddressApiResponse<{
+      common: AddressCommonResult;
+      juso: Array<AddressCoordItem>;
+    }>
+  >(`${prefix}/addrCoordApi.do`, {
     params,
   });
 }

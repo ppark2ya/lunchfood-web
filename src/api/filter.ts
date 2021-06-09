@@ -1,4 +1,5 @@
 import apiClient from './apiClient';
+import { ApiResponse, AccountPlaceInfo } from './types';
 
 const prefix = '/filter';
 /**
@@ -7,8 +8,15 @@ const prefix = '/filter';
  * @param place_id: 카카오 api에서 넘어온 식당 식별자(Number)
  * @param place_name: 식당이름(String)
  */
-export function insertSelectedPlace(requestBody: any) {
-  return apiClient.post(`${prefix}/insert_selected_place`, requestBody);
+export function insertSelectedPlace(requestBody: {
+  id: number;
+  place_id: number;
+  place_name: string;
+}) {
+  return apiClient.post<ApiResponse>(
+    `${prefix}/insert_selected_place`,
+    requestBody,
+  );
 }
 
 /**
@@ -20,16 +28,26 @@ export function insertSelectedPlace(requestBody: any) {
  * @param set_date: 제한 일자(Number)
  * @param date_on: 제한 일자 필터 (0:비활성, 1:활성)(Number)
  */
-export function updateFilter(requestBody: any) {
-  return apiClient.post(`${prefix}/update_filter`, requestBody);
+export function updateFilter(requestBody: {
+  id: number;
+  radius: number;
+  radius_on: number;
+  place_on: number;
+  set_date: number;
+  date_on: number;
+}) {
+  return apiClient.post<ApiResponse>(`${prefix}/update_filter`, requestBody);
 }
 
 /**
  * @desc 음식점 필터링 정보 반환
  * @param id: 사용자 id(Number)
  */
-export function getSelectedPlace(requestBody: any) {
-  return apiClient.post(`${prefix}/get_selected_place`, requestBody);
+export function getSelectedPlace(id: number) {
+  return apiClient.post<ApiResponse<Array<AccountPlaceInfo>>>(
+    `${prefix}/get_selected_place`,
+    { id },
+  );
 }
 
 /**
@@ -37,6 +55,12 @@ export function getSelectedPlace(requestBody: any) {
  * @param id: 사용자 id(Number)
  * @param place_id: 음식점 식별자(Number)
  */
-export function delete_selected_place(requestBody: any) {
-  return apiClient.post(`${prefix}/delete_selected_place`, requestBody);
+export function delete_selected_place(requestBody: {
+  id: number;
+  place_id: number;
+}) {
+  return apiClient.post<ApiResponse>(
+    `${prefix}/delete_selected_place`,
+    requestBody,
+  );
 }
