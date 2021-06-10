@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { KAKAO_API_KEY } from 'Constants';
 import KakaoLogin from 'react-kakao-login';
 import { insertAccount } from 'api/account';
 import styled from 'styled-components';
@@ -62,7 +61,7 @@ function Login() {
         if (resultCode === 200) {
           history.push('/address');
         } else {
-          window.alert('로그인 실패!');
+          alert('로그인 실패!');
         }
       }
     },
@@ -70,13 +69,14 @@ function Login() {
   );
 
   const kakaoLoginOnFail = useCallback((error: KakaoError) => {
+    alert('로그인 실패!');
     console.error(error);
   }, []);
 
   return (
     <div>
       <KakaoLogin
-        token={KAKAO_API_KEY}
+        token={import.meta.env.VITE_KAKAO_API_KEY}
         onSuccess={kakaoLoginOnSuccess}
         onFail={kakaoLoginOnFail}
       />

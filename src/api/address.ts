@@ -1,5 +1,4 @@
 import apiClient from './apiClient';
-import { KOROAD_URL, OPEN_API_ROAD_ADDRESS_KEY } from 'Constants';
 import {
   AddressApiResponse,
   AddressCommonResult,
@@ -7,10 +6,10 @@ import {
   AddressCoordItem,
 } from './types';
 
-const prefix = `${KOROAD_URL}/addrlink`;
+const prefix = `${import.meta.env.VITE_KOROAD_URL}/addrlink`;
 
 export const defaultAddrParams = {
-  confmKey: OPEN_API_ROAD_ADDRESS_KEY,
+  confmKey: import.meta.env.VITE_OPEN_API_ROAD_ADDRESS_KEY,
   currentPage: 1,
   countPerPage: 10,
   resultType: 'json',
