@@ -1,33 +1,85 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { KAKAO_API_KEY } from 'Constants';
 import KakaoLogin from 'react-kakao-login';
-import { getAccount } from 'api/account';
+import { insertAccount } from 'api/account';
+import styled from 'styled-components';
 
-async function asyncGetAccount() {
-  const { data } = await getAccount({ id: 1660286870 });
-  console.log(`getAccount res: `, data);
+interface KakaoError {
+  error: string;
+  error_description: string;
+}
+interface LoginResponse {
+  token_type: string;
+  access_token: string;
+  expires_in: string;
+  refresh_token: string;
+  refresh_token_expires_in: number;
+  scope: string;
+}
+interface Profile {
+  nickname: string;
+  profile_image: string;
+  thumbnail_image_url: string;
+  profile_needs_agreement?: boolean;
+}
+interface KakaoAccount {
+  profile: Profile;
+  email: string;
+  age_range: string;
+  birthday: string;
+  birthyear: string;
+  gender: 'female' | 'male';
+  phone_number: string;
+  ci: string;
+}
+interface UserProfile {
+  id: number;
+  kakao_account: KakaoAccount;
+  synched_at: string;
+  connected_at: string;
+  properties: Profile;
 }
 
 function Login() {
-  React.useEffect(() => {
-    const kakaoMaps = window.kakao.maps;
-    const options = {
-      center: new kakaoMaps.LatLng(37.365264512305174, 127.10676860117488),
-      level: 3,
-    };
+  const history = useHistory();
+  const kakaoLoginOnSuccess = useCallback(
+    async (response: { response: LoginResponse; profile?: UserProfile }) => {
+      console.log(response);
 
-    // const map = new kakaoMaps.Map(document.getElementById('map'), options);
-    // asyncGetAccount();
+      if (response.profile) {
+        const { profile } = response;
+        const {
+          data: { resultCode },
+        } = await insertAccount({
+          id: profile.id,
+          age: '0',
+          birthday: profile.kakao_account.birthday,
+          birthyear: '0',
+          gender: profile.kakao_account.gender,
+        });
+
+        if (resultCode === 200) {
+          history.push('/address');
+        } else {
+          window.alert('로그인 실패!');
+        }
+      }
+    },
+    [],
+  );
+
+  const kakaoLoginOnFail = useCallback((error: KakaoError) => {
+    console.error(error);
   }, []);
 
   return (
     <div>
       <KakaoLogin
         token={KAKAO_API_KEY}
-        onSuccess={(response) => console.log(response)}
-        onFail={(error) => console.error(error)}
+        onSuccess={kakaoLoginOnSuccess}
+        onFail={kakaoLoginOnFail}
       />
-      <div id="map" style={{ width: '400px', height: '400px' }}></div>
     </div>
   );
 }
