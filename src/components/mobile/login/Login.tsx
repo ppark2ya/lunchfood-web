@@ -1,85 +1,39 @@
-import React, { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import KakaoLogin from 'react-kakao-login';
-import { insertAccount } from 'api/account';
 import styled from 'styled-components';
-
-interface KakaoError {
-  error: string;
-  error_description: string;
-}
-interface LoginResponse {
-  token_type: string;
-  access_token: string;
-  expires_in: string;
-  refresh_token: string;
-  refresh_token_expires_in: number;
-  scope: string;
-}
-interface Profile {
-  nickname: string;
-  profile_image: string;
-  thumbnail_image_url: string;
-  profile_needs_agreement?: boolean;
-}
-interface KakaoAccount {
-  profile: Profile;
-  email: string;
-  age_range: string;
-  birthday: string;
-  birthyear: string;
-  gender: 'female' | 'male';
-  phone_number: string;
-  ci: string;
-}
-interface UserProfile {
-  id: number;
-  kakao_account: KakaoAccount;
-  synched_at: string;
-  connected_at: string;
-  properties: Profile;
-}
+import logo from 'assets/login_logo.png';
+import useLogin from 'hooks/useLogin';
+import Button from 'components/common/Button';
+import Input from 'components/common/Input';
+import useDebounceEffect from 'hooks/useDebounceEffect';
+import useInput from 'hooks/useInput';
+import { getFoodAuto } from 'api/history';
 
 function Login() {
-  const history = useHistory();
-  const kakaoLoginOnSuccess = useCallback(
-    async (response: { response: LoginResponse; profile?: UserProfile }) => {
-      console.log(response);
+  const { kakaoLoginOnSuccess, kakaoLoginOnFail } = useLogin();
+  const [value, onChange] = useInput('');
 
-      if (response.profile) {
-        const { profile } = response;
-        const {
-          data: { resultCode },
-        } = await insertAccount({
-          id: profile.id,
-          age: '0',
-          birthday: profile.kakao_account.birthday,
-          birthyear: '0',
-          gender: profile.kakao_account.gender,
-        });
-
-        if (resultCode === 200) {
-          history.push('/address');
-        } else {
-          alert('로그인 실패!');
-        }
-      }
-    },
-    [],
-  );
-
-  const kakaoLoginOnFail = useCallback((error: KakaoError) => {
-    alert('로그인 실패!');
-    console.error(error);
-  }, []);
+  const res = useDebounceEffect(getFoodAuto, value);
+  console.log(res);
 
   return (
     <div>
+      {/* <img src={logo} alt="" /> */}
+      <Button
+        onClick={() => {
+          console.log('asdasda');
+        }}
+      >
+        공통1231
+      </Button>
+      <Input value={value} onChange={onChange} placeholder={'asd'} />
       <KakaoLogin
         token={import.meta.env.VITE_KAKAO_API_KEY}
         onSuccess={kakaoLoginOnSuccess}
         onFail={kakaoLoginOnFail}
-      />
+      >
+        카카오톡 로그인
+      </KakaoLogin>
     </div>
   );
 }

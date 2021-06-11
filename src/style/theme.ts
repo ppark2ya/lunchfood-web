@@ -3,10 +3,13 @@ import { DefaultTheme } from 'styled-components';
 export const theme: DefaultTheme = {
   basicWidth: '320px',
   font: {
-    family: 'SpoqaHanSans',
+    family: 'Noto Sans KR',
     size: '12px',
   },
   color: {
-    main: '#4d4c51',
+    red: '#DA291C',
+    black: '#333333',
+    fontGray: '#999999',
+    backGray: '#E0E0E0',
   },
 };

@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default function Histroy() {
-  return <div></div>;
+  return <div>history</div>;
 }
