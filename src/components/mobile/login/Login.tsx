@@ -8,6 +8,7 @@ import Input from 'components/common/Input';
 import useDebounceEffect from 'hooks/useDebounceEffect';
 import useInput from 'hooks/useInput';
 import { getFoodAuto } from 'api/history';
+import KakaoMap from 'components/common/KakaoMap';
 
 function Login() {
   const { kakaoLoginOnSuccess, kakaoLoginOnFail } = useLogin();
@@ -26,6 +27,7 @@ function Login() {
       >
         공통1231
       </Button>
+      <KakaoMap />
       <Input value={value} onChange={onChange} placeholder={'asd'} />
       <KakaoLogin
         token={import.meta.env.VITE_KAKAO_API_KEY}

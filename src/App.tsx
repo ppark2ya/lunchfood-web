@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { isMobile } from 'react-device-detect';
 import Browser from 'routes/Browser';
 import Mobile from 'routes/Mobile';
@@ -33,7 +33,19 @@ function App() {
     );
   });
 
-  const MountedComponent = isMobile ? <Mobile /> : <Browser />;
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.id = 'kakao-map-sdk';
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
+      import.meta.env.VITE_KAKAO_API_KEY
+    }&autoload=false&libraries=services,drawing`;
+    document.head.appendChild(script);
+  }, []);
+
+  const MountedComponent = useMemo(
+    () => (isMobile ? <Mobile /> : <Browser />),
+    [isMobile],
+  );
 
   return (
     <>
