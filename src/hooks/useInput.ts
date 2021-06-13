@@ -10,7 +10,15 @@ function useInput(initialValue: string) {
     [setValue],
   );
 
-  return [value, onChange] as [string, typeof onChange];
+  const onClear = useCallback(() => {
+    setValue('');
+  }, [setValue]);
+
+  return [value, onChange, onClear] as [
+    string,
+    typeof onChange,
+    typeof onClear,
+  ];
 }
 
 export default useInput;

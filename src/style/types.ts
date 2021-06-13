@@ -1,4 +1,4 @@
-export interface ICommonStyleProps {
+export interface ICommonStyleProps<T = any> {
   width?: string;
   height?: string;
   color?: string;
@@ -17,4 +17,5 @@ export interface ICommonStyleProps {
   textAlign?: string;
   zIndex?: number;
   className?: string;
+  componentType?: T;
 }

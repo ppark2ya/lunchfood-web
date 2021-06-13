@@ -1,34 +1,27 @@
 import React from 'react';
 import KakaoLogin from 'react-kakao-login';
 import styled from 'styled-components';
-import logo from 'assets/login_logo.png';
 import useLogin from 'hooks/useLogin';
-import Button from 'components/common/Button';
 import Input from 'components/common/Input';
-import useDebounceEffect from 'hooks/useDebounceEffect';
 import useInput from 'hooks/useInput';
+import Button from 'components/common/Button';
+import useDebounceEffect from 'hooks/useDebounceEffect';
 import { getFoodAuto } from 'api/history';
-import KakaoMap from 'components/common/KakaoMap';
 
 function Login() {
   const { kakaoLoginOnSuccess, kakaoLoginOnFail } = useLogin();
-  const [value, onChange] = useInput('');
+  const [value, onChange, onClear] = useInput('');
 
-  const res = useDebounceEffect(getFoodAuto, value);
-  console.log(res);
-
+  useDebounceEffect(getFoodAuto, value);
   return (
     <div>
-      {/* <img src={logo} alt="" /> */}
-      <Button
-        onClick={() => {
-          console.log('asdasda');
-        }}
-      >
-        공통1231
-      </Button>
-      <KakaoMap />
-      <Input value={value} onChange={onChange} placeholder={'asd'} />
+      {/* <Button componentType="enable">123</Button> */}
+      <Input
+        value={value}
+        onChange={onChange}
+        onClear={onClear}
+        placeholder={'asd'}
+      />
       <KakaoLogin
         token={import.meta.env.VITE_KAKAO_API_KEY}
         onSuccess={kakaoLoginOnSuccess}
