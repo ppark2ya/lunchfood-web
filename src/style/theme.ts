@@ -12,4 +12,7 @@ export const theme: DefaultTheme = {
     fontGray: '#999999',
     backGray: '#E0E0E0',
   },
+  border: {
+    radius: '15px',
+  },
 };

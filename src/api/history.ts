@@ -46,7 +46,6 @@ export function getPlaceHistory(requestBody: {
 /**
  * @desc 최근 선택한 음식점 히스토리 반환
  * @param id: 사용자 id(Number)
- * @param interval_date: 며칠 전 메뉴까지 고려해서 추천할 것인지(Number)
  */
 export function checkToday(id: number) {
   return apiClient.get<ApiResponse<Array<BestMenu>>>(`${prefix}/check_today`, {

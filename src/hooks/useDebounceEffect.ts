@@ -5,7 +5,7 @@ import { ApiResponse } from 'api/types';
 function useDebounceEffect<V>(
   effect: (args: V) => Promise<AxiosResponse<ApiResponse>>,
   value: V,
-  delay = 500,
+  delay = 300,
 ) {
   const [responseData, setResponseData] = useState<ApiResponse>();
 

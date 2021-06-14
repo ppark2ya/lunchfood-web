@@ -15,5 +15,9 @@ declare module 'styled-components' {
       fontGray: string;
       backGray: string;
     };
+
+    border: {
+      radius: string;
+    };
   }
 }

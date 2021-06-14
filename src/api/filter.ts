@@ -55,7 +55,7 @@ export function getSelectedPlace(id: number) {
  * @param id: 사용자 id(Number)
  * @param place_id: 음식점 식별자(Number)
  */
-export function delete_selected_place(requestBody: {
+export function deleteSelectedPlace(requestBody: {
   id: number;
   place_id: number;
 }) {

@@ -55,6 +55,7 @@ function useLogin() {
         });
 
         if (resultCode === 200) {
+          localStorage.id = profile.id;
           history.push('/address');
         } else {
           alert('로그인 실패!');

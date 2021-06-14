@@ -1,17 +1,19 @@
-import React, { CSSProperties, useCallback } from 'react';
+import React, { CSSProperties, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { ICommonStyleProps } from 'style/types';
+import SearchButton from 'components/common/SearchButton';
 
-const Container = styled.div<ICommonStyleProps>`
-  display: flex;
+const EditContainer = styled.div<ICommonStyleProps>`
+  display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-content: center;
   align-items: center;
-  width: 100%;
+  width: 85%;
   height: 50px;
   background-color: ${(props) => props.theme.color.backGray};
-  border-radius: 15px;
+  border-radius: ${(props) => props.theme.border.radius};
+  float: left;
 
   input {
     color: ${(props) => props.theme.color.black};
@@ -32,23 +34,54 @@ const Container = styled.div<ICommonStyleProps>`
   }
 `;
 
+const ViewContainer = styled(EditContainer)`
+  background-color: #fff;
+  border: 1px solid ${(props) => props.theme.color.backGray};
+`;
+
 interface IInputProps {
-  width?: string;
-  height?: string;
   className?: string;
   style?: CSSProperties;
   placeholder?: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  mode: 'edit' | 'view';
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClear?: () => void;
+  onClick?: () => void;
 }
 
 function Input(props: IInputProps) {
+  const { value, mode, onChange, placeholder, onClear, onClick } = props;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClear = useCallback(() => {
+    if (onClear) {
+      onClear();
+      inputRef.current?.focus();
+    }
+  }, [onClear, inputRef]);
+
   return (
-    <Container>
-      <input type="text" {...props} />
-      <span onClick={props.onClear} />
-    </Container>
+    <>
+      {mode === 'edit' ? (
+        <EditContainer {...props} onClick={() => {}}>
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+          />
+          {value.length > 0 && <span onClick={handleClear} />}
+        </EditContainer>
+      ) : (
+        <ViewContainer>
+          <input type="text" value={value} readOnly />
+        </ViewContainer>
+      )}
+
+      <SearchButton onClick={onClick} />
+    </>
   );
 }
 
