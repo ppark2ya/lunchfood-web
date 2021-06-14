@@ -1,20 +1,29 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import configureStore, { history } from 'store';
-import { ConnectedRouter } from 'connected-react-router';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import Header from 'components/web/common/Header';
+import Footer from 'components/web/common/Footer';
 import Login from 'components/web/login/Login';
+import History from 'components/web/history/History';
+import Filter from 'components/web/filter/Filter';
+import Address from 'components/web/address/Address';
 
-const store = configureStore();
 function Browser() {
   return (
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route path="/" component={Login} />
-        </Switch>
-      </ConnectedRouter>
-    </Provider>
+    <BrowserRouter>
+      <Header />
+      <Switch>
+        <Route path="/" component={Login} exact />
+        <Route path="/filter" component={Filter} />
+        <Route path="/address" component={Address} />
+        <Route path="/history" component={History} />
+        <Route>
+          <div>
+            <h1>404</h1>
+          </div>
+        </Route>
+      </Switch>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
