@@ -6,6 +6,7 @@ import Login from 'components/web/login/Login';
 import History from 'components/web/history/History';
 import Filter from 'components/web/filter/Filter';
 import Address from 'components/web/address/Address';
+import NotFoundPage from 'components/web/common/NotFountPage';
 
 function Browser() {
   return (
@@ -16,11 +17,7 @@ function Browser() {
         <Route path="/filter" component={Filter} />
         <Route path="/address" component={Address} />
         <Route path="/history" component={History} />
-        <Route>
-          <div>
-            <h1>404</h1>
-          </div>
-        </Route>
+        <Route component={NotFoundPage} />
       </Switch>
       <Footer />
     </BrowserRouter>
