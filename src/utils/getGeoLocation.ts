@@ -9,7 +9,7 @@ export default function getGeoLocation(
       {
         enableHighAccuracy: true,
         maximumAge: 0,
-        timeout: 3000,
+        timeout: 10000,
       }, // PositionOptions
     );
   }

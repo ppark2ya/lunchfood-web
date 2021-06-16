@@ -47,7 +47,7 @@ function App() {
     document.head.appendChild(script);
 
     return () => {
-      document.head.appendChild(script);
+      document.head.removeChild(script);
     };
   }, []);
 
