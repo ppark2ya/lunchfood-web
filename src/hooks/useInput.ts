@@ -1,24 +1,25 @@
 import { useState, useCallback } from 'react';
 
-function useInput(initialValue: string) {
-  const [value, setValue] = useState(initialValue);
+type ReturnType<T> = [
+  T,
+  (event: React.ChangeEvent<HTMLInputElement>) => void,
+  () => void,
+];
+function useInput<T>(initialValue: T): ReturnType<T> {
+  const [value, setValue] = useState<T>(initialValue);
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(event.target.value);
+      setValue((event.target.value as unknown) as T);
     },
     [setValue],
   );
 
   const onClear = useCallback(() => {
-    setValue('');
+    setValue(('' as unknown) as T);
   }, [setValue]);
 
-  return [value, onChange, onClear] as [
-    string,
-    typeof onChange,
-    typeof onClear,
-  ];
+  return [value, onChange, onClear];
 }
 
 export default useInput;

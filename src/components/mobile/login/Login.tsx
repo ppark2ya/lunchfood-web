@@ -11,22 +11,6 @@ function Login() {
   const { kakaoLoginOnSuccess, kakaoLoginOnFail } = useLogin();
   const [value, onChange, onClear] = useInput('');
 
-  React.useEffect(() => {
-    console.log(navigator.geolocation);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function (position: GeolocationPosition) {
-          console.log(
-            position.coords.latitude + ' ' + position.coords.longitude,
-          );
-          // alert(position.coords.latitude + ' ' + position.coords.longitude);
-        },
-        function (positionError: GeolocationPositionError) {
-          console.error(positionError);
-        },
-      );
-    }
-  }, []);
   return (
     <div>
       <KakaoMap />
