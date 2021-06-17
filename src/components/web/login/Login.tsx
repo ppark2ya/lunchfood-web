@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledLogin = styled.main`
-  .loginsection {
+  .functionsection {
     position: absolute;
     width: 1200px;
     height: 660px;
@@ -73,7 +73,7 @@ const StyledLogin = styled.main`
     color: #666666;
   }
 
-  .loginlogo {
+  .appname {
     position: absolute;
     width: 265px;
     height: 36.69px;
@@ -133,7 +133,7 @@ const StyledLogin = styled.main`
 function Login() {
   return (
     <StyledLogin>
-      <div className="loginsection">
+      <div className="functionsection">
         <div className="imagesection">
           <img className="mainimage" src="src/assets/img_login_main.png" />
           <span className="imagedesigner">
@@ -143,7 +143,7 @@ function Login() {
         <span className="title">
           <strong>점심 고민</strong>은 이제 그만!!
         </span>
-        <img className="loginlogo" src="src/assets/img_login_appname.png" />
+        <img className="appname" src="src/assets/img_login_appname.png" />
         <button className="kakaologinbtn">카카오톡 로그인</button>
         <button className="signupbtn">회원가입</button>
       </div>
