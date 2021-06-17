@@ -20,20 +20,17 @@ export const defaultAddrParams = {
  * @desc 주소지 조회
  * @param keyword: 검색어(String)
  */
-export function getAddressList(params: {
-  confmKey: string;
-  currentPage: number;
-  countPerPage: number;
-  resultType: string;
-  keyword: string;
-}) {
+export function getAddressList(keyword: string) {
   return apiClient.get<
     AddressApiResponse<{
       common: AddressCommonResult;
       juso: Array<AddressRoadItem>;
     }>
   >(`${prefix}/addrLinkApi.do`, {
-    params,
+    params: {
+      ...defaultAddrParams,
+      keyword,
+    },
   });
 }
 

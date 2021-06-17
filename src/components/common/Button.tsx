@@ -39,6 +39,7 @@ function styleReducer(props: any) {
       return `
           background-color: #ffffff;
           color: ${props.theme.color.red};
+          border: 1px solid ${props.theme.color.red};
         `;
   }
 }
