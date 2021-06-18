@@ -7,6 +7,7 @@ import History from 'components/web/history/History';
 import Filter from 'components/web/filter/Filter';
 import Address from 'components/web/address/Address';
 import NotFoundPage from 'components/web/common/NotFountPage';
+import Recommend from 'components/web/recommend/Recommend';
 
 function Browser() {
   return (
@@ -17,6 +18,7 @@ function Browser() {
         <Route path="/filter" component={Filter} />
         <Route path="/address" component={Address} />
         <Route path="/history" component={History} />
+        <Route path="/recommend" component={Recommend} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />
