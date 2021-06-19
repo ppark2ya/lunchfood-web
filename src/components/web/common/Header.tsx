@@ -2,10 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-const StyledItem = css`
-   {
-    position: absolute;
-    top: 37px;
+const StyledHeader = styled.header`
+  display: flex;
+  height: 90px;
+  align-items: center;
+  border-width: 1px;
+  border-color: #e0e0e0;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-style: solid;
+
+  .logo {
+    width: 200px;
+    height: 28px;
+    margin-left: calc(360 / 1920 * 100%);
+  }
+
+  .item {
     width: 70px;
     height: 15px;
 
@@ -21,38 +35,17 @@ const StyledItem = css`
 
     color: #222222;
   }
-`;
 
-const StyledHeader = styled.header`
-  height: 90px;
-  border-width: 1px;
-  border-color: #e0e0e0;
-  border-top-style: none;
-  border-left-style: none;
-  border-right-style: none;
-  border-bottom-style: solid;
-
-  .logo {
-    position: absolute;
-    width: 200px;
-    height: 28px;
-    left: 360px;
-    top: 31px;
+  a:nth-child(2) {
+    margin-left: calc(589 / 1920 * 100%);
   }
 
-  .item-1st {
-    ${StyledItem};
-    left: 1149px;
+  a:nth-child(3) {
+    margin-left: calc(120 / 1920 * 100%);
   }
 
-  .item-2nd {
-    ${StyledItem};
-    left: 1324px;
-  }
-
-  .item-3rd {
-    ${StyledItem};
-    left: 1499px;
+  a:nth-child(4) {
+    margin-left: calc(120 / 1920 * 100%);
   }
 `;
 
@@ -60,13 +53,13 @@ function Header() {
   return (
     <StyledHeader>
       <img className="logo" src="src\assets\img_gnb_title.png" />
-      <Link className="item-1st" to="/address">
+      <Link className="item" to="/address">
         위치설정
       </Link>
-      <Link className="item-2nd" to="/history">
+      <Link className="item" to="/history">
         식사기록
       </Link>
-      <Link className="item-3rd" to="/filter">
+      <Link className="item" to="/filter">
         내 점심줄
       </Link>
     </StyledHeader>
