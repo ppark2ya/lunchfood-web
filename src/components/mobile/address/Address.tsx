@@ -1,16 +1,35 @@
 import React from 'react';
-import { getAccount } from 'api/account';
+import styled from 'styled-components';
+import Header from '../common/Header';
+import useDebounceEffect from 'hooks/useDebounceEffect';
+import useInput from 'hooks/useInput';
+import { getAddressList } from 'api/address';
+import Input from 'components/common/Input';
+
+const Container = styled.div`
+  height: 90vh;
+  padding: 2vh 4vw;
+`;
 
 function Address() {
-  React.useEffect(() => {
-    async function asyncGetAccount() {
-      const { data } = await getAccount({ id: 1660286870 });
-      console.log(`getAccount res: `, data);
-    }
-    // asyncGetAccount();
-  }, []);
+  const [value, onChange, onClear] = useInput('');
+  const res = useDebounceEffect(getAddressList, value);
+  console.log(res);
 
-  return <div></div>;
+  return (
+    <>
+      <Header />
+      <Container>
+        <Input
+          mode="edit"
+          value={value}
+          onChange={onChange}
+          onClear={onClear}
+          placeholder="동명(읍/면)으로 검색(EX. 신림동)"
+        />
+      </Container>
+    </>
+  );
 }
 
 export default Address;

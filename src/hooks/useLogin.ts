@@ -55,6 +55,7 @@ function useLogin() {
         });
 
         if (resultCode === 200) {
+          // 1660286870
           localStorage.id = profile.id;
           history.push('/address');
         } else {
