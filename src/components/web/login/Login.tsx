@@ -1,5 +1,7 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import KakaoLogin from 'react-kakao-login';
+import useLogin from 'hooks/useLogin';
 
 const StyledLogin = styled.main`
   .mainsection {
@@ -80,25 +82,22 @@ const StyledLogin = styled.main`
     margin-top: 14.61px;
   }
 
-  .kakaologinbtn {
-    width: 340px;
-    height: 52px;
-    margin-top: 53.7px;
+  .kakaologinbtn > button {
+    width: 340px !important;
+    height: 52px !important;
+    margin-top: 53.7px !important;
 
-    background: #f4dc01;
-    border-radius: 5px;
+    background: #f4dc01 !important;
+    border-radius: 5px !important;
 
-    font-family: Noto Sans CJK KR;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 16px;
-    /* identical to box height, or 100% */
-
-    text-align: center;
-    letter-spacing: -0.04em;
-
-    color: #222222;
+    font-family: Noto Sans CJK KR !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 16px !important;
+    line-height: 16px !important;
+    text-align: center !important;
+    letter-spacing: -0.04em !important;
+    color: #222222 !important;
   }
 
   .signupbtn {
@@ -126,6 +125,8 @@ const StyledLogin = styled.main`
 `;
 
 function Login() {
+  const { kakaoLoginOnSuccess, kakaoLoginOnFail } = useLogin();
+
   return (
     <StyledLogin>
       <div className="mainsection">
@@ -140,7 +141,15 @@ function Login() {
             <strong>점심 고민</strong>은 이제 그만!!
           </span>
           <img className="appname" src="src/assets/img_login_appname.png" />
-          <button className="kakaologinbtn">카카오톡 로그인</button>
+          <div className="kakaologinbtn">
+            <KakaoLogin
+              token={import.meta.env.VITE_KAKAO_API_KEY}
+              onSuccess={kakaoLoginOnSuccess}
+              onFail={kakaoLoginOnFail}
+            >
+              카카오톡 로그인
+            </KakaoLogin>
+          </div>
           <button className="signupbtn">회원가입</button>
         </div>
       </div>
