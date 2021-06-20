@@ -4,11 +4,12 @@ import {
   AddressCommonResult,
   AddressRoadItem,
   AddressCoordItem,
+  CoordItemParams,
 } from './types';
 
 const prefix = `${import.meta.env.VITE_KOROAD_URL}/addrlink`;
 
-export const defaultAddrParams = {
+const defaultAddrParams = {
   confmKey: import.meta.env.VITE_OPEN_API_ROAD_ADDRESS_KEY,
   currentPage: 1,
   countPerPage: 10,
@@ -42,21 +43,17 @@ export function getAddressList(keyword: string) {
  * @param buldMnnm: 건물본번(Number)
  * @param buldSlno: 건물부번(Number)
  */
-export function getAddressCoord(params: {
-  confmKey: string;
-  admCd: string;
-  rnMgtSn: string;
-  udrtYn: string;
-  buldMnnm: number;
-  buldSlno: number;
-  roadAddr: string;
-}) {
+export function getAddressCoord(params: CoordItemParams) {
   return apiClient.get<
     AddressApiResponse<{
       common: AddressCommonResult;
       juso: Array<AddressCoordItem>;
     }>
   >(`${prefix}/addrCoordApi.do`, {
-    params,
+    params: {
+      confmKey: import.meta.env.VITE_OPEN_API_LOCATION_KEY,
+      resultType: 'json',
+      ...params,
+    },
   });
 }

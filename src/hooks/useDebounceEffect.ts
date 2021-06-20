@@ -3,30 +3,20 @@ import { AxiosResponse } from 'axios';
 import {
   ApiResponse,
   AddressApiResponse,
-  AddressCommonResult,
-  AddressRoadItem,
-  AddressCoordItem,
+  AddressResponseType,
 } from 'api/types';
-
-type AddressResponse =
-  | {
-      common: AddressCommonResult;
-      juso: Array<AddressRoadItem>;
-    }
-  | {
-      common: AddressCommonResult;
-      juso: Array<AddressCoordItem>;
-    };
 
 function useDebounceEffect<V>(
   effect: (
     args: V,
-  ) => Promise<AxiosResponse<ApiResponse | AddressApiResponse<any>>>,
+  ) => Promise<
+    AxiosResponse<ApiResponse | AddressApiResponse<AddressResponseType>>
+  >,
   value: V,
   delay = 300,
 ) {
   const [responseData, setResponseData] =
-    useState<ApiResponse | AddressApiResponse<AddressResponse>>();
+    useState<ApiResponse | AddressResponseType['juso']>();
 
   useEffect(() => {
     const handler = setTimeout(async () => {

@@ -21,12 +21,12 @@ export interface Account {
   set_date?: number;
 }
 
-export interface AddressApiResponse<
-  R extends {
-    common: AddressCommonResult;
-    juso: Array<AddressRoadItem> | Array<AddressCoordItem>;
-  }
-> {
+export type AddressResponseType = {
+  common: AddressCommonResult;
+  juso: Array<AddressRoadItem> | Array<AddressCoordItem>;
+};
+
+export interface AddressApiResponse<R extends AddressResponseType> {
   results: R;
 }
 
@@ -68,6 +68,14 @@ export interface AddressRoadItem {
   hemdNm?: string; // 관할주민센터 ※ 참고정보이며, 실제와 다를 수 있습니다.
 }
 
+export interface CoordItemParams {
+  admCd: string;
+  rnMgtSn: string;
+  udrtYn: string;
+  buldMnnm: number;
+  buldSlno: number;
+  roadAddr: string;
+}
 export interface AddressCoordItem {
   admCd: string; // 행정구역코드
   rnMgtSn: string; // 도로명코드

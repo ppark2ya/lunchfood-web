@@ -13,7 +13,7 @@ function App() {
     apiClient.interceptors.request.use(
       function (config) {
         const { url } = config;
-        if (url?.match(/place_auto|food_auto/gi)) {
+        if (url?.match(/addrLinkApi|place_auto|food_auto/gi)) {
           return config;
         }
         setIsLoading(true);
