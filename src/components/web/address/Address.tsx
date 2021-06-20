@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
@@ -74,9 +74,24 @@ const StyledAddress = styled.main`
 
 function Address() {
   const [value, onChange, onClear] = useInput('');
+  const [isShow, setIsShow] = useState(false);
+
+  const toggleModal = useCallback(() => {
+    setIsShow((prev) => !prev);
+  }, []);
+
+  const modal = useMemo(
+    () => (
+      <ModalPortal>
+        <SearchResult value={value} />
+      </ModalPortal>
+    ),
+    [value],
+  );
 
   return (
     <StyledAddress>
+      {isShow && modal}
       <div className="mainsection">
         <span className="title">
           <strong>점심 고민</strong>은 이제 그만!!
@@ -90,7 +105,7 @@ function Address() {
             placeholder="동명(읍, 면)으로 검색(EX. 신림동)"
             onChange={onChange}
             onClear={onClear}
-            onClick={() => showSearchResultModal(value)}
+            onClick={toggleModal}
           />
         </div>
         <div className="mycoordsection">
@@ -99,15 +114,6 @@ function Address() {
       </div>
     </StyledAddress>
   );
-}
-
-function showSearchResultModal(keyword: string) {
-  //const result = getAddressList(keyword);
-  //console.log(result);
-  //  TO-DO : SearchReseultModal 호출
-  <ModalPortal>
-    <SearchResult value={keyword} />;
-  </ModalPortal>;
 }
 
 export default Address;

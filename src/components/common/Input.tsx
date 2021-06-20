@@ -17,7 +17,7 @@ const EditContainer = styled.div<ICommonStyleProps>`
 
   input {
     color: ${(props) => props.theme.color.black};
-    font-size: 3.6vw;
+    font-size: 1rem;
     padding-left: 2rem;
     width: 90%;
   }
