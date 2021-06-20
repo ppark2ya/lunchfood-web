@@ -1,7 +1,11 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
+import useInput from 'hooks/useInput';
+import { getAddressList } from 'api/address';
+import ModalPortal from 'modal/portal/ModalPortal';
+import SearchResult from 'modal/contents/SearchResult';
 
 const StyledAddress = styled.main`
   .mainsection {
@@ -69,6 +73,8 @@ const StyledAddress = styled.main`
 `;
 
 function Address() {
+  const [value, onChange, onClear] = useInput('');
+
   return (
     <StyledAddress>
       <div className="mainsection">
@@ -79,9 +85,12 @@ function Address() {
         <span className="borderline" />
         <div className="searchsection">
           <Input
-            mode="edit"
-            value=""
+            mode={'edit'}
+            value={value}
             placeholder="동명(읍, 면)으로 검색(EX. 신림동)"
+            onChange={onChange}
+            onClear={onClear}
+            onClick={() => showSearchResultModal(value)}
           />
         </div>
         <div className="mycoordsection">
@@ -90,6 +99,15 @@ function Address() {
       </div>
     </StyledAddress>
   );
+}
+
+function showSearchResultModal(keyword: string) {
+  //const result = getAddressList(keyword);
+  //console.log(result);
+  //  TO-DO : SearchReseultModal 호출
+  <ModalPortal>
+    <SearchResult value={keyword} />;
+  </ModalPortal>;
 }
 
 export default Address;
