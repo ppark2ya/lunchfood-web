@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import Header from '../common/Header';
 import useDebounceEffect from 'hooks/useDebounceEffect';
 import useInput from 'hooks/useInput';
-import { getAddressCoord, getAddressList } from 'api/address';
+import useAddress from 'hooks/useAddress';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
-import { AddressRoadItem, CoordItemParams } from 'api/types';
+import { getAddressList } from 'api/address';
+import { AddressRoadItem } from 'api/types';
 import AddressList from './AddressList';
 
 const Container = styled.div`
@@ -21,11 +22,7 @@ const StyledInput = styled(Input)`
 function Address() {
   const [value, onChange, onClear] = useInput('');
   const items = useDebounceEffect(getAddressList, value) as AddressRoadItem[];
-
-  const onAddressClick = useCallback(async (params: CoordItemParams) => {
-    const { data } = await getAddressCoord(params);
-    console.log(data);
-  }, []);
+  const { onAddressClick } = useAddress();
 
   return (
     <>

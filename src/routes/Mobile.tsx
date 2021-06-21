@@ -15,7 +15,7 @@ function Mobile() {
         <Switch>
           <Route path="/" component={Login} exact />
           <Route path="/address" component={Address} />
-          <Route path="/Recommend" component={Recommend} />
+          <Route path="/recommend" component={Recommend} />
           <Route path="/history" component={History} />
           <Route path="/filter" component={Filter} />
         </Switch>
