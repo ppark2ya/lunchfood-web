@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import Header from '../common/Header';
 import useDebounceEffect from 'hooks/useDebounceEffect';
 import useInput from 'hooks/useInput';
-import { getAddressList } from 'api/address';
+import { getAddressCoord, getAddressList } from 'api/address';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
-import { AddressRoadItem } from 'api/types';
+import { AddressRoadItem, CoordItemParams } from 'api/types';
 import AddressList from './AddressList';
 
 const Container = styled.div`
@@ -22,6 +22,11 @@ function Address() {
   const [value, onChange, onClear] = useInput('');
   const items = useDebounceEffect(getAddressList, value) as AddressRoadItem[];
 
+  const onAddressClick = useCallback(async (params: CoordItemParams) => {
+    const { data } = await getAddressCoord(params);
+    console.log(data);
+  }, []);
+
   return (
     <>
       <Header />
@@ -34,7 +39,10 @@ function Address() {
           placeholder="동명(읍/면)으로 검색(EX. 신림동)"
         />
         <Button componentType="enable">내 위치로 검색하기</Button>
-        <AddressList items={value !== '' ? items : undefined} />
+        <AddressList
+          items={value !== '' ? items : undefined}
+          onAddressClick={onAddressClick}
+        />
       </Container>
     </>
   );

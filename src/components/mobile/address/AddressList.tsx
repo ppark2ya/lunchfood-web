@@ -8,14 +8,10 @@ const Container = styled.div``;
 
 interface IProps {
   items?: AddressRoadItem[];
+  onAddressClick: (params: CoordItemParams) => Promise<void>;
 }
-function AddressList({ items }: IProps) {
+function AddressList({ items, onAddressClick }: IProps) {
   console.log(items);
-
-  const onAddressClick = useCallback(async (params: CoordItemParams) => {
-    const { data } = await getAddressCoord(params);
-    console.log(data);
-  }, []);
 
   const addressItems = items?.map((item, index) => (
     <AddressItem
