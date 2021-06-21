@@ -1,18 +1,12 @@
-import React, { memo, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { memo } from 'react';
 import { AddressRoadItem, CoordItemParams } from 'api/types';
-import { getAddressCoord } from 'api/address';
 import AddressItem from './AddressItem';
-
-const Container = styled.div``;
 
 interface IProps {
   items?: AddressRoadItem[];
   onAddressClick: (params: CoordItemParams) => Promise<void>;
 }
 function AddressList({ items, onAddressClick }: IProps) {
-  console.log(items);
-
   const addressItems = items?.map((item, index) => (
     <AddressItem
       key={index}
@@ -30,7 +24,7 @@ function AddressList({ items, onAddressClick }: IProps) {
       }
     />
   ));
-  return <Container>{addressItems}</Container>;
+  return <div>{addressItems}</div>;
 }
 
 export default memo(AddressList);
