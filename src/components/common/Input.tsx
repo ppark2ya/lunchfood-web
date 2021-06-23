@@ -71,6 +71,11 @@ function Input(props: IInputProps) {
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+            onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+              if (event.code === 'Enter') {
+                onClick && onClick();
+              }
+            }}
           />
           {value.length > 0 && <span onClick={handleClear} />}
         </EditContainer>

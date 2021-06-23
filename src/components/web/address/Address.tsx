@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
 import useInput from 'hooks/useInput';
-import ModalPortal from 'modal/portal/ModalPortal';
-import SearchResult from 'modal/contents/SearchResult';
+import ModalPortal from 'components/web/modal/portal/ModalPortal';
 import useAddress from 'hooks/useAddress';
+import AddressList from 'components/common/AddressList';
+import isEmpty from 'utils/isEmpty';
 
 const StyledAddress = styled.main`
-  .mainsection {
+  .main-section {
     display: flex;
     width: 1200px;
     height: 660px;
@@ -29,7 +30,6 @@ const StyledAddress = styled.main`
     margin-top: 47px;
 
     font-family: Noto Sans CJK KR;
-    font-style: normal;
     font-size: 18px;
     line-height: 30px;
     /* identical to box height, or 167% */
@@ -40,13 +40,13 @@ const StyledAddress = styled.main`
     color: #666666;
   }
 
-  .appname {
+  .app-name {
     width: 390px;
     height: 54px;
     margin-top: 15px;
   }
 
-  .borderline {
+  .border-line {
     width: 940px;
     height: 0px;
     margin-top: 50px;
@@ -54,7 +54,7 @@ const StyledAddress = styled.main`
     border: 1px solid #e0e0e0;
   }
 
-  .searchsection {
+  .search-section {
     margin-top: 52px;
     width: 580px;
     & > div:first-child {
@@ -66,57 +66,82 @@ const StyledAddress = styled.main`
     }
   }
 
-  .mycoordsection {
+  .mycoord-section {
     margin-top: 30px;
     width: 340px;
+  }
+`;
+
+const StyledModal = styled.div`
+  background: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-contents {
+    background: white;
+    height: 50vh;
+    overflow-y: auto;
+    border-radius: ${(props) => props.theme.border.radius};
   }
 `;
 
 function Address() {
   const [value, onChange, onClear] = useInput('');
   const [isShow, setIsShow] = useState(false);
-  const { addressRoadItems, asyncGetAddressList, onAddressClick } =
-    useAddress();
+  const {
+    addressRoadItems,
+    asyncGetAddressList,
+    onAddressClick,
+  } = useAddress();
 
   const toggleModal = useCallback(() => {
     setIsShow((prev) => !prev);
-    console.log(`value: ${value}`);
-    asyncGetAddressList(value);
-    console.log(`value: ${value}`);
   }, []);
 
   const modal = useMemo(
     () => (
       <ModalPortal>
-        <SearchResult
-          items={addressRoadItems}
-          onAddressClick={onAddressClick}
-        />
+        <StyledModal>
+          <div className="modal-contents">
+            <AddressList
+              items={addressRoadItems}
+              onAddressClick={onAddressClick}
+            />
+          </div>
+        </StyledModal>
       </ModalPortal>
     ),
-    [value],
+    [addressRoadItems, onAddressClick],
   );
 
   return (
     <StyledAddress>
       {isShow && modal}
-      <div className="mainsection">
+      <div className="main-section">
         <span className="title">
           <strong>점심 고민</strong>은 이제 그만!!
         </span>
-        <img className="appname" src="src/assets/img_address_appname.png" />
-        <span className="borderline" />
-        <div className="searchsection">
+        <img className="app-name" src="src/assets/img_address_appname.png" />
+        <span className="border-line" />
+        <div className="search-section">
           <Input
             mode={'edit'}
             value={value}
             placeholder="동명(읍, 면)으로 검색(EX. 신림동)"
             onChange={onChange}
             onClear={onClear}
-            onClick={toggleModal}
+            onClick={() => {
+              asyncGetAddressList(value, toggleModal);
+            }}
           />
         </div>
-        <div className="mycoordsection">
+        <div className="mycoord-section">
           <Button componentType="enable">내 위치로 검색하기</Button>
         </div>
       </div>

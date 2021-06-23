@@ -9,18 +9,23 @@ function useAddress() {
   const [addressRoadItems, setAddressRoadItems] = useState<AddressRoadItem[]>();
   const history = useHistory();
 
-  const asyncGetAddressList = useCallback(async (keyword: string) => {
-    try {
-      const { data } = await getAddressList(keyword);
-      if (data.results.common.errorCode === '0') {
-        setAddressRoadItems(data.results.juso);
-      } else {
-        console.error(`resultCode: ${data.results.common.errorCode}`);
+  const asyncGetAddressList = useCallback(
+    async (keyword: string, callback?: any) => {
+      try {
+        const { data } = await getAddressList(keyword);
+        if (data.results.common.errorCode === '0') {
+          setAddressRoadItems(data.results.juso);
+          callback();
+        } else {
+          console.error(`resultCode: ${data.results.common.errorCode}`);
+          window.alert('검색결과가 없습니다. 주소를 다시 입력해주세요');
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+    },
+    [],
+  );
 
   const onAddressClick = useCallback(async (params: CoordItemParams) => {
     try {
@@ -38,6 +43,9 @@ function useAddress() {
         }
       } else {
         console.error(`resultCode: ${data.results.common.errorCode}`);
+        window.alert(
+          '선택하신 주소의 좌표를 얻는데 실패했습니다. 관리자에게 문의하세요',
+        );
       }
     } catch (e) {
       console.error(e);
@@ -51,6 +59,9 @@ function useAddress() {
         history.push('/recommend');
       } else {
         console.error(`resultCode: ${data.resultCode}`);
+        window.alert(
+          '선택하신 주소 저장에 실패했습니다. 관리자에게 문의하세요',
+        );
       }
     } catch (e) {
       console.error(e);

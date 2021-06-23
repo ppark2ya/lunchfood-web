@@ -8,7 +8,7 @@ import Input from 'components/common/Input';
 import Button from 'components/common/Button';
 import { getAddressList } from 'api/address';
 import { AddressRoadItem } from 'api/types';
-import AddressList from './AddressList';
+import AddressList from '../../common/AddressList';
 import getGeoLocation from 'utils/getGeoLocation';
 import { useHistory } from 'react-router-dom';
 
