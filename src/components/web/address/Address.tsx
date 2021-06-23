@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
 import useInput from 'hooks/useInput';
-import { getAddressList } from 'api/address';
 import ModalPortal from 'modal/portal/ModalPortal';
 import SearchResult from 'modal/contents/SearchResult';
+import useAddress from 'hooks/useAddress';
 
 const StyledAddress = styled.main`
   .mainsection {
@@ -75,15 +75,23 @@ const StyledAddress = styled.main`
 function Address() {
   const [value, onChange, onClear] = useInput('');
   const [isShow, setIsShow] = useState(false);
+  const { addressRoadItems, asyncGetAddressList, onAddressClick } =
+    useAddress();
 
   const toggleModal = useCallback(() => {
     setIsShow((prev) => !prev);
+    console.log(`value: ${value}`);
+    asyncGetAddressList(value);
+    console.log(`value: ${value}`);
   }, []);
 
   const modal = useMemo(
     () => (
       <ModalPortal>
-        <SearchResult value={value} />
+        <SearchResult
+          items={addressRoadItems}
+          onAddressClick={onAddressClick}
+        />
       </ModalPortal>
     ),
     [value],

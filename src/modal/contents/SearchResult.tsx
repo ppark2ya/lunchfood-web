@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getAddressList } from 'api/address';
 import ModalPortal from 'modal/portal/ModalPortal';
+import AddressList from 'components/mobile/address/AddressList';
+import { AddressRoadItem, CoordItemParams } from 'api/types';
 
 const StyledModal = styled.div`
   .modalcontainer {
@@ -18,24 +19,21 @@ const StyledModal = styled.div`
 
   .modalcontents {
     background: white;
-    padding: 1rem;
-    width: 400px;
-    height: auto;
   }
 `;
 
-interface SearchResultProps {
-  value: string;
+interface IProps {
+  items?: AddressRoadItem[];
+  onAddressClick: (params: CoordItemParams) => Promise<void>;
 }
 
-function SearchResult({ value }: SearchResultProps) {
+function SearchResult({ items, onAddressClick }: IProps) {
   return (
     <ModalPortal>
       <StyledModal>
         <div className="modalcontainer">
           <div className="modalcontents">
-            <h1>{value}</h1>
-            <button>닫기</button>
+            <AddressList items={items} onAddressClick={onAddressClick} />
           </div>
         </div>
       </StyledModal>
