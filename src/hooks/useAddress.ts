@@ -4,6 +4,7 @@ import { AddressRoadItem, CoordItemParams, Account } from 'api/types';
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import isEmpty from 'utils/isEmpty';
+import { COMMON_MESSAGE } from 'Constants';
 
 function useAddress() {
   const [addressRoadItems, setAddressRoadItems] = useState<AddressRoadItem[]>();
@@ -18,7 +19,7 @@ function useAddress() {
           callback();
         } else {
           console.error(`resultCode: ${data.results.common.errorCode}`);
-          window.alert('검색결과가 없습니다. 주소를 다시 입력해주세요');
+          window.alert(COMMON_MESSAGE.ADDRESS_MESSAGES.NO_RESULT);
         }
       } catch (e) {
         console.error(e);
@@ -43,9 +44,7 @@ function useAddress() {
         }
       } else {
         console.error(`resultCode: ${data.results.common.errorCode}`);
-        window.alert(
-          '선택하신 주소의 좌표를 얻는데 실패했습니다. 관리자에게 문의하세요',
-        );
+        window.alert(COMMON_MESSAGE.ADDRESS_MESSAGES.GET_ERROR);
       }
     } catch (e) {
       console.error(e);
@@ -59,9 +58,7 @@ function useAddress() {
         history.push('/recommend');
       } else {
         console.error(`resultCode: ${data.resultCode}`);
-        window.alert(
-          '선택하신 주소 저장에 실패했습니다. 관리자에게 문의하세요',
-        );
+        window.alert(COMMON_MESSAGE.ADDRESS_MESSAGES.UPDATE_ERROR);
       }
     } catch (e) {
       console.error(e);
@@ -72,6 +69,7 @@ function useAddress() {
     addressRoadItems,
     asyncGetAddressList,
     onAddressClick,
+    asyncUpdateLocation,
   };
 }
 

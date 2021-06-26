@@ -1890,83 +1890,77 @@ declare namespace kakao.maps.services {
     y: number;
   }
 
+  export type JibunAddressType = {
+    /**
+     * 전체 지번 주소
+     */
+    address_name: string;
+    /**
+     * 지역 1Depth명 - 시도 단위
+     */
+    region_1depth_name: string;
+    /**
+     * 지역 2Depth명 - 구 단위
+     */
+    region_2depth_name: string;
+    /**
+     * 지역 3Depth명 - 동 단위
+     */
+    region_3depth_name: string;
+    /**
+     * 산 여부, Y 또는 N
+     */
+    mountain_yn: string;
+    /**
+     * 지번 주 번지
+     */
+    main_address_no: string;
+    /**
+     * 지번 부 번지, 없을 경우 ""
+     */
+    sub_address_no: string;
+    /**
+     * @Deprecated 우편번호(6자리)
+     */
+    zip_code: string;
+  };
+  export type RoadAddressType = {
+    /**
+     * 전체 지번 주소
+     */
+    address_name: string;
+    /**
+     * 지역 1Depth명 - 시도 단위
+     */
+    region_1depth_name: string;
+    /**
+     * 지역 2Depth명 - 구 단위
+     */
+    region_2depth_name: string;
+    /**
+     * 지역 3Depth명 - 동 단위
+     */
+    region_3depth_name: string;
+    /**
+     * 산 여부, Y 또는 N
+     */
+    mountain_yn: string;
+    /**
+     * 지번 주 번지
+     */
+    main_address_no: string;
+    /**
+     * 지번 부 번지, 없을 경우 ""
+     */
+    sub_address_no: string;
+    /**
+     * @Deprecated 우편번호(6자리)
+     */
+    zip_code: string;
+  };
   export interface Coord2AddressResponse {
-    address: {
-      /**
-       * 전체 지번 주소
-       */
-      address_name: string;
-      /**
-       * 지역 1Depth명 - 시도 단위
-       */
-      region_1depth_name: string;
-      /**
-       * 지역 2Depth명 - 구 단위
-       */
-      region_2depth_name: string;
-      /**
-       * 지역 3Depth명 - 동 단위
-       */
-      region_3depth_name: string;
-      /**
-       * 산 여부, Y 또는 N
-       */
-      mountain_yn: string;
-      /**
-       * 지번 주 번지
-       */
-      main_address_no: string;
-      /**
-       * 지번 부 번지, 없을 경우 ""
-       */
-      sub_address_no: string;
-      /**
-       * @Deprecated 우편번호(6자리)
-       */
-      zip_code: string;
-    };
-    road_address?: {
-      /**
-       * 전체 도로명 주소
-       */
-      address_name: string;
-      /**
-       * 지역 1Depth명 - 시도 단위
-       */
-      region_1depth_name: string;
-      /**
-       * 지역 2Depth명 - 구 단위
-       */
-      region_2depth_name: string;
-      /**
-       * 지역 3Depth명 - 면 단위
-       */
-      region_3depth_name: string;
-      /**
-       * 도로명
-       */
-      road_name: string;
-      /**
-       * 지하 여부, Y 또는 N
-       */
-      underground_yn: string;
-      /**
-       * 건물 본번
-       */
-      main_building_no: string;
-      /**
-       * 건물 부번. 없을 경우 ""
-       */
-      sub_building_no: string;
-      /**
-       * 건물 이름
-       */
-      building_name: string;
-      /**
-       * 우편번호(5자리)
-       */
-      zone_no: string;
-    };
+    address: JibunAddressType;
+    road_address?: RoadAddressType;
   }
   /**
    * 주소-좌표간 변환 서비스 객체를 생성한다.

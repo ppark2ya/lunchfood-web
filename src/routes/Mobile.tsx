@@ -4,6 +4,7 @@ import Loading from 'components/common/Loading';
 
 const Login = lazy(() => import('components/mobile/login/Login'));
 const Address = lazy(() => import('components/mobile/address/Address'));
+const MyLocation = lazy(() => import('components/mobile/address/MyLocation'));
 const Recommend = lazy(() => import('components/mobile/recommend/Recommend'));
 const History = lazy(() => import('components/mobile/history/History'));
 const Filter = lazy(() => import('components/mobile/filter/Filter'));
@@ -15,7 +16,7 @@ function Mobile() {
         <Switch>
           <Route path="/" component={Login} exact />
           <Route path="/address" component={Address} />
-          <Route path="/mylocation" component={Address} />
+          <Route path="/mylocation" component={MyLocation} />
           <Route path="/recommend" component={Recommend} />
           <Route path="/history" component={History} />
           <Route path="/filter" component={Filter} />

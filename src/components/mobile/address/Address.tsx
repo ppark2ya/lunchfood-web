@@ -11,6 +11,7 @@ import { AddressRoadItem } from 'api/types';
 import AddressList from '../../common/AddressList';
 import getGeoLocation from 'utils/getGeoLocation';
 import { useHistory } from 'react-router-dom';
+import { DEFAULT_POSITION, LatLng } from 'Constants';
 
 const Container = styled.div`
   height: 90vh;
@@ -26,6 +27,7 @@ function Address() {
   const items = useDebounceEffect(getAddressList, value) as AddressRoadItem[];
   const { onAddressClick } = useAddress();
   const [shouldKakaoMap, setShouldKakaoMap] = useState(false);
+  const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
   const history = useHistory();
 
   useEffect(() => {
@@ -33,18 +35,21 @@ function Address() {
       const {
         coords: { latitude, longitude },
       } = position;
-      console.log(latitude, longitude);
+      setUserCoord([latitude, longitude]);
       setShouldKakaoMap(true);
     });
   }, []);
 
   const onAddressSearchClick = useCallback(() => {
     if (shouldKakaoMap) {
-      history.push('/mylocation');
+      history.push({
+        pathname: '/mylocation',
+        state: { userCoord },
+      });
     } else {
       window.alert('위치 권한이 없습니다.');
     }
-  }, [shouldKakaoMap]);
+  }, [shouldKakaoMap, userCoord]);
 
   return (
     <>
