@@ -3,7 +3,7 @@ import { ApiResponse, BestMenu } from 'api/types';
 import { getBestMenuList } from 'api/recommend';
 import { checkToday, insertHistory } from 'api/history';
 
-function useHistory() {
+function useRecommend() {
   const [bestMenuList, setBestMenuList] = useState<ApiResponse<BestMenu[]>>();
   const [todayMenu, setTodayMenu] = useState<ApiResponse<BestMenu[]>>();
   const [insertHisResult, setInsertHisResult] = useState<ApiResponse>();
@@ -62,4 +62,4 @@ function useHistory() {
   };
 }
 
-export default useHistory;
+export default useRecommend;

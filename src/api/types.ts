@@ -10,8 +10,8 @@ export interface Account {
   birthday?: string;
   birthyear?: string;
   gender?: string;
-  x?: string; // lon
-  y?: string; // lat
+  x?: number; // lon
+  y?: number; // lat
   address?: string;
   type?: string;
   radius?: number;
@@ -114,8 +114,8 @@ export interface PlaceInfo {
   place_name: string;
   place_url: string;
   road_address_name: string;
-  x: string;
-  y: string;
+  x: number;
+  y: number;
 }
 
 export interface AccountPlaceInfo {

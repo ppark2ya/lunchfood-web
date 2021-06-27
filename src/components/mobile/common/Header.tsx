@@ -1,14 +1,15 @@
 import React, { ReactChild, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import backButton from 'assets/mb_ic_back_btn.png';
-import headerLogo from 'assets/mb_ic_header_logo.png';
+import { ReactComponent as BackButton } from 'assets/mb_ic_back_btn.svg';
+import { ReactComponent as HeaderLogo } from 'assets/mb_ic_header_logo.svg';
 
 const Container = styled.div`
-  height: 10vh;
+  height: 7vh;
   display: flex;
   align-items: center;
   padding: 0px 3vw;
+  box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.05);
 
   .header-text {
     text-align: center;
@@ -18,9 +19,10 @@ const Container = styled.div`
 
 interface IHeaderProps {
   children?: ReactChild;
+  isBackBtn?: boolean;
 }
 
-function Header({ children }: IHeaderProps) {
+function Header({ children, isBackBtn = true }: IHeaderProps) {
   const history = useHistory();
 
   const onBackBtnClick = useCallback(() => {
@@ -29,14 +31,9 @@ function Header({ children }: IHeaderProps) {
 
   return (
     <Container>
-      <img
-        className="back-btn"
-        src={backButton}
-        alt="back button"
-        onClick={onBackBtnClick}
-      />
+      {isBackBtn && <BackButton width="2vw" onClick={onBackBtnClick} />}
       <div className="header-text">
-        {children ? children : <img src={headerLogo} alt="header" />}
+        {children ? children : <HeaderLogo width="30vw" />}
       </div>
     </Container>
   );

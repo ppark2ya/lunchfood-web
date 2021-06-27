@@ -1,3 +1,15 @@
+/**
+ * case1: 내 위치로 주소 설정
+ *  - KakaoMap 컴포넌트 렌더링 전에 geolocation 권한을 획득해야 들어갈 수 있도록 유도
+ *  - userCoord props 에 gps 좌표값 넣어서 map 생성 후 Geocoder 객체 이용해서 주소 노출, 설정 가능
+ *
+ * case2: 내 위치 + 추천 맛집 보여주기
+ *  - case1 와 마찬가지로 geolocation 권한을 획득해야 화면을 보여주도록 할 것인지, 없으면 그냥 맛집 위치만 표시할지 정해야 함
+ *  - getAccount(id) 를 통해서 유저 위치 정보 얻어오기
+ *  - getBestMenuList() 를 통해서 추천 맛집 리스트 얻어오기
+ *  - checkToday() 를 통해서 오늘 선택한 추천 맛집 리스트 얻어오기
+ *  - getAccount().join([...checkToday(), getBestMenuList()]) 지도에 뿌려주기
+ */
 import { DEFAULT_POSITION, LatLng, COMMON_MESSAGE } from 'Constants';
 import { useState, useCallback, useEffect } from 'react';
 
@@ -56,7 +68,13 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
   /**
    * hook을 호출하는 순간 바로 지도 로딩
    */
-  useEffect(onLoadKakaoMap, []);
+  useEffect(() => {
+    onLoadKakaoMap();
+
+    return () => {
+      setKakaoMap(undefined);
+    };
+  }, []);
 
   /**
    * 사용자 위치와 추천 가게의 위치의 중간 좌표를 중심점으로 잡고 추천가게위치에 marker 표시추가

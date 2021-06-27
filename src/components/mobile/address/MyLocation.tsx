@@ -7,17 +7,18 @@ import Button from 'components/common/Button';
 import useKakaoMap from 'hooks/useKakaoMap';
 import useAddress from 'hooks/useAddress';
 import isEmpty from 'utils/isEmpty';
+import Header from 'components/mobile/common/Header';
 
 const mapSize = {
-  height: '70vh',
+  height: '65vh',
 };
 
 const Container = styled.div`
-  height: 30vh;
-  padding: 5vw 3vh;
+  height: 28vh;
+  padding: 2vh 5.5vw;
 `;
 const Contents = styled.div`
-  height: 18vh;
+  height: 17vh;
 
   .jibun {
     color: ${(props) => props.theme.color.black};
@@ -60,8 +61,8 @@ function MyLocation() {
     if (!isEmpty(userCoord)) {
       asyncUpdateLocation({
         id: localStorage.id,
-        x: String(userCoord[1]),
-        y: String(userCoord[0]),
+        x: userCoord[1],
+        y: userCoord[0],
         address: jibunAddressName || roadAddressName,
         type: 'UTMK',
       });
@@ -70,6 +71,7 @@ function MyLocation() {
 
   return (
     <>
+      <Header />
       <div ref={mapRef} style={mapSize}></div>
       <Container>
         <Contents>
