@@ -4,15 +4,18 @@ import { getBestMenuList } from 'api/recommend';
 import { checkToday, insertHistory } from 'api/history';
 
 function useRecommend() {
-  const [bestMenuList, setBestMenuList] = useState<ApiResponse<BestMenu[]>>();
-  const [todayMenu, setTodayMenu] = useState<ApiResponse<BestMenu[]>>();
+  const [bestMenuList, setBestMenuList] = useState<BestMenu[]>();
   const [insertHisResult, setInsertHisResult] = useState<ApiResponse>();
 
   const asyncGetBestMenuList = useCallback(
     async (requestBody: { id: number; interval_date: number }) => {
       try {
         const { data } = await getBestMenuList(requestBody);
-        setBestMenuList(data);
+        if (data.resultCode === 200) {
+          asyncCheckToday(requestBody.id, data.data!!);
+        } else {
+          setBestMenuList(undefined);
+        }
       } catch (e) {
         console.error(e);
         setBestMenuList(undefined);
@@ -21,15 +24,23 @@ function useRecommend() {
     [],
   );
 
-  const asyncCheckToday = useCallback(async (id: number) => {
-    try {
-      const { data } = await checkToday(id);
-      setTodayMenu(data);
-    } catch (e) {
-      console.error(e);
-      setTodayMenu(undefined);
-    }
-  }, []);
+  const asyncCheckToday = useCallback(
+    async (id: number, bestMenuParam: BestMenu[]) => {
+      try {
+        const { data } = await checkToday(id);
+        if (data.resultCode === 200) {
+          if (bestMenuParam) {
+            setBestMenuList([...data.data!!, ...bestMenuParam]);
+          }
+        } else {
+          setBestMenuList(bestMenuParam);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [],
+  );
 
   const asyncInsertHistory = useCallback(
     async (requestBody: {
@@ -38,8 +49,8 @@ function useRecommend() {
       place_name: string;
       category_name: string;
       good_bad: number;
-      x: string;
-      y: string;
+      x: number;
+      y: number;
     }) => {
       try {
         const { data } = await insertHistory(requestBody);
@@ -54,7 +65,6 @@ function useRecommend() {
 
   return {
     bestMenuList,
-    todayMenu,
     insertHisResult,
     asyncGetBestMenuList,
     asyncCheckToday,

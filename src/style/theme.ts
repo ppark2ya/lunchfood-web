@@ -13,6 +13,6 @@ export const theme: DefaultTheme = {
     backGray: '#E0E0E0',
   },
   border: {
-    radius: '15px',
+    radius: '10px',
   },
 };

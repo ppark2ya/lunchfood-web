@@ -28,7 +28,6 @@ function App() {
     apiClient.interceptors.response.use(
       function (response) {
         setIsLoading(false);
-        console.log(response);
         return response;
       },
       function (error) {

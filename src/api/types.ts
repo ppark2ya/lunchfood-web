@@ -94,7 +94,7 @@ export interface BestMenu {
   category_group_name: string;
   category_name: string;
   distance: string;
-  id: string;
+  id: number;
   phone: string;
   place_name: string;
   place_url: string;

@@ -22,7 +22,7 @@ const Content = styled.div<{ isActive: boolean; path: string }>`
 
   .icon {
     svg {
-      width: ${(props) => (props.path === '/recommend' ? '5vw' : '4vw')};
+      width: ${(props) => (props.path === '/main/recommend' ? '5vw' : '4vw')};
       path {
         fill: ${(props) =>
           props.isActive ? props.theme.color.red : props.theme.color.fontGray};
@@ -49,28 +49,28 @@ function Navigation() {
     {
       id: 0,
       icon: <Home />,
-      path: '/recommend',
+      path: '/main/recommend',
       title: '홈',
       isActive: true,
     },
     {
       id: 1,
       icon: <Location />,
-      path: '/address',
+      path: '/main/address',
       title: '위치설정',
       isActive: false,
     },
     {
       id: 2,
       icon: <MenuHistory />,
-      path: '/history',
+      path: '/main/history',
       title: '식사기록',
       isActive: false,
     },
     {
       id: 3,
       icon: <MyMenu />,
-      path: '/filter',
+      path: '/main/filter',
       title: '내점심줄',
       isActive: false,
     },

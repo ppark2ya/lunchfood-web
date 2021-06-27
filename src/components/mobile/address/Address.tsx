@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Header from '../common/Header';
 import useDebounceEffect from 'hooks/useDebounceEffect';
 import useInput from 'hooks/useInput';
 import useAddress from 'hooks/useAddress';
@@ -53,7 +52,6 @@ function Address() {
 
   return (
     <>
-      <Header />
       <Container>
         <StyledInput
           mode="edit"

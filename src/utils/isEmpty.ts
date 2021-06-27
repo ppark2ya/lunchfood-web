@@ -1,4 +1,4 @@
-export default function isEmpty<T>(value: T): Boolean {
+export default function isEmpty<T>(value: T): boolean {
   let result = true;
   if (value instanceof Object) {
     if (value !== undefined && Object.keys(value).length > 0) {

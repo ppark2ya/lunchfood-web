@@ -63,7 +63,7 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
         });
       };
     }
-  }, [mapRef]);
+  }, [mapRef, userCoord]);
 
   /**
    * hook을 호출하는 순간 바로 지도 로딩

@@ -18,8 +18,8 @@ export function insertHistory(requestBody: {
   place_name: string;
   category_name: string;
   good_bad: number;
-  x: string;
-  y: string;
+  x: number;
+  y: number;
 }) {
   return apiClient.post<ApiResponse>(`${prefix}/insert_history`, requestBody);
 }
@@ -49,7 +49,7 @@ export function getPlaceHistory(requestBody: {
  */
 export function checkToday(id: number) {
   return apiClient.get<ApiResponse<Array<BestMenu>>>(`${prefix}/check_today`, {
-    params: id,
+    params: { id },
   });
 }
 

@@ -7,7 +7,7 @@ const StyledButton = styled.button<ICommonStyleProps<ButtonType>>`
   display: inline-block;
   text-align: center;
   width: ${(props) => (props.width ? props.width : '100%')};
-  height: ${(props) => (props.height ? props.height : '5.6vh')};
+  height: ${(props) => (props.height ? props.height : '50px')};
   border-radius: ${(props) => props.theme.border.radius};
   font-size: 0.9rem;
   line-height: 0.9rem;

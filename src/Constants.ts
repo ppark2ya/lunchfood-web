@@ -13,4 +13,8 @@ export const COMMON_MESSAGE = {
       '선택하신 주소의 좌표를 얻는데 실패했습니다. 관리자에게 문의하세요',
     UPDATE_ERROR: '선택하신 주소 저장에 실패했습니다. 관리자에게 문의하세요',
   },
+  ACCOUNT_MESSAGE: {
+    NO_RESULT: '사용자 정보 조회 결과가 없습니다.',
+    LOAD_FAIL: '사용자 정보 조회에 실패했습니다.',
+  },
 };

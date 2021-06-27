@@ -1,6 +1,13 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  RouteComponentProps,
+  Switch,
+} from 'react-router-dom';
 import Loading from 'components/common/Loading';
+import Header from 'components/mobile/common/Header';
+import Navigation from 'components/mobile/common/Navigation';
 
 const Intro = lazy(() => import('components/mobile/intro/Intro'));
 const Login = lazy(() => import('components/mobile/login/Login'));
@@ -19,12 +26,35 @@ function Mobile() {
           <Route path="/login" component={Login} />
           <Route path="/address" component={Address} />
           <Route path="/mylocation" component={MyLocation} />
-          <Route path="/recommend" component={Recommend} />
-          <Route path="/history" component={History} />
-          <Route path="/filter" component={Filter} />
+          <Route
+            path="/main(/address|/recommend|/history|/filter)"
+            render={Wrapper}
+          />
         </Switch>
       </Suspense>
     </BrowserRouter>
+  );
+}
+
+function Wrapper(props: RouteComponentProps) {
+  const { pathname } = props.location;
+
+  return (
+    <>
+      <Header isBackBtn={false} />
+      {pathname === '/main/address' ? (
+        <Address />
+      ) : pathname === '/main/recommend' ? (
+        <Recommend />
+      ) : pathname === '/main/history' ? (
+        <History />
+      ) : pathname === '/main/filter' ? (
+        <Filter />
+      ) : (
+        ''
+      )}
+      <Navigation />
+    </>
   );
 }
 

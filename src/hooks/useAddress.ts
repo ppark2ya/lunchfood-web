@@ -55,7 +55,7 @@ function useAddress() {
     try {
       const { data } = await updateLocation(requestBody);
       if (data.resultCode === 200) {
-        history.push('/recommend');
+        history.push('/main/recommend');
       } else {
         console.error(`resultCode: ${data.resultCode}`);
         window.alert(COMMON_MESSAGE.ADDRESS_MESSAGES.UPDATE_ERROR);
