@@ -27,7 +27,7 @@ const EditContainer = styled.div<ICommonStyleProps>`
     width: 1rem;
     height: 1rem;
     display: inline-block;
-    background-image: url(src/assets/mb_ic_input_clear.png);
+    background-image: url(/src/assets/mb_ic_input_clear.png);
     background-size: cover;
     margin-right: 1.5vw;
     vertical-align: middle;

@@ -6,7 +6,7 @@ const StyledButton = styled.div`
   width: 14%;
   height: 50px;
   border-radius: ${(props) => props.theme.border.radius};
-  background-image: url(src/assets/ic_search.png);
+  background-image: url(/src/assets/ic_search.png);
   background-repeat: no-repeat;
   background-position: center;
   border: 1px solid ${(props) => props.theme.color.backGray};
