@@ -64,8 +64,11 @@ function Recommend() {
   const [isChoice, setIsChoice] = useState(false);
   const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
   const { onSetPlacePosition } = useKakaoMap({ mapRef, userCoord });
-  const { bestMenuList, asyncGetBestMenuList, asyncInsertHistory } =
-    useRecommend();
+  const {
+    bestMenuList,
+    asyncGetBestMenuList,
+    asyncInsertHistory,
+  } = useRecommend();
   const { account, asyncGetAccount } = useAccount();
   const { id } = localStorage;
 
@@ -79,8 +82,8 @@ function Recommend() {
 
   useEffect(() => {
     if (account) {
-      const lng = account.x!!;
-      const lat = account.y!!;
+      const lng = Number(account.x!!);
+      const lat = Number(account.y!!);
       setUserCoord([lat, lng]);
     }
   }, [account]);

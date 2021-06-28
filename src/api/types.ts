@@ -83,8 +83,8 @@ export interface AddressCoordItem {
   udrtYn: string; // 지하여부(0 : 지상, 1 : 지하)
   buldMnnm: number; // 건물본번
   buldSlno: number; // 건물부번
-  entX: string; // X좌표
-  entY: string; // Y좌표
+  entX: number; // X좌표
+  entY: number; // Y좌표
   bdNm?: string; // 건물명
 }
 

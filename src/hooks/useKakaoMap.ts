@@ -23,13 +23,19 @@ interface IKakaoMapProps {
    */
   userCoord: LatLng;
 }
-
+/**
+ * 참고 URLS
+ * https://codesandbox.io/s/gifted-wescoff-77nwu?file=/src/KakaoMap.js:868-877
+ * https://apis.map.kakao.com/web/sample/setBounds/
+ * https://apis.map.kakao.com/web/documentation/#services_Geocoder_coord2RegionCode
+ * https://apis.map.kakao.com/web/sample/multipleMarkerImage/
+ */
 function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
   const [kakaoMap, setKakaoMap] = useState<kakao.maps.Map>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
-  const [jibunAddressName, setjibunAddressName] = useState<string>('');
-  const [roadAddressName, setroadAddressName] = useState<string>('');
-
+  const [jibunAddressName, setjibunAddressName] = useState('');
+  const [roadAddressName, setroadAddressName] = useState('');
+  const [, setPlaceMarker] = useState<kakao.maps.Marker>();
   /**
    * 사용자 위치 기반으로 카카오맵 로드
    */
@@ -83,20 +89,43 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
   const onSetPlacePosition = useCallback(
     (locPosition: LatLng) => {
       if (kakaoMap) {
-        const position = new kakao.maps.LatLng(...locPosition);
-        new kakao.maps.Marker({
-          map: kakaoMap,
-          position,
+        setPlaceMarker((marker) => {
+          marker?.setMap(null);
+          const position = new kakao.maps.LatLng(...locPosition);
+          const imageSrc = '/src/assets/mb_ic_user_gps_position.png', // 마커이미지의 주소입니다
+            imageSize = new kakao.maps.Size(30, 33); // 마커이미지의 크기입니다
+          // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+          const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+          return new kakao.maps.Marker({
+            map: kakaoMap,
+            position,
+            image: markerImage, // 마커이미지 설정
+          });
         });
+
+        // if (positions.length > 0) {
+        //   const bounds = positions.reduce(
+        //     (bounds, latlng) => bounds.extend(latlng),
+        //     new kakao.maps.LatLngBounds()
+        //   );
+
+        //   kakaoMap.setBounds(bounds);
+        // }
 
         const center = [
           (userCoord[0] + locPosition[0]) / 2,
           (userCoord[1] + locPosition[1]) / 2,
         ] as LatLng;
-        kakaoMap.setCenter(new kakao.maps.LatLng(...center));
+        const centerPosition = new kakao.maps.LatLng(...center);
 
-        // searchAddrFromCoords(position, displayCenterInfo);
-        // searchDetailAddrFromCoords(position, displayAddressName);
+        kakaoMap.setLevel(4, {
+          animate: {
+            duration: 500,
+          },
+          anchor: centerPosition,
+        });
+        kakaoMap.panTo(centerPosition);
       }
     },
     [kakaoMap, userCoord],
