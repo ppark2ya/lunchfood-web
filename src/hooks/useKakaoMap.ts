@@ -21,7 +21,8 @@ interface IKakaoMapProps {
   /**
    * 사용자 위치정보(y, x) -> gps 혹은 계정에 저장된 좌표정보
    */
-  userCoord: LatLng;
+  // userCoord: LatLng;
+  markerPositions: LatLng[];
 }
 /**
  * 참고 URLS
@@ -30,21 +31,21 @@ interface IKakaoMapProps {
  * https://apis.map.kakao.com/web/documentation/#services_Geocoder_coord2RegionCode
  * https://apis.map.kakao.com/web/sample/multipleMarkerImage/
  */
-function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
+function useKakaoMap({ mapRef, markerPositions }: IKakaoMapProps) {
   const [kakaoMap, setKakaoMap] = useState<kakao.maps.Map>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
   const [jibunAddressName, setjibunAddressName] = useState('');
   const [roadAddressName, setroadAddressName] = useState('');
-  const [, setPlaceMarker] = useState<kakao.maps.Marker>();
+  const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
   /**
    * 사용자 위치 기반으로 카카오맵 로드
    */
-  const onLoadKakaoMap = useCallback(() => {
+  useEffect(() => {
     const script = document.getElementById('kakao-map-sdk');
     if (script != null) {
       script.onload = () => {
         kakao.maps.load(() => {
-          const position = new kakao.maps.LatLng(...userCoord);
+          const position = new kakao.maps.LatLng(...DEFAULT_POSITION);
           const options = {
             center: position,
             level: 3,
@@ -54,47 +55,36 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
             setKakaoMap(map);
             // 주소-좌표 변환 객체를 생성합니다
             setGeocoder(new kakao.maps.services.Geocoder());
-            const imageSrc = '/src/assets/mb_ic_user_gps_position.png', // 마커이미지의 주소입니다
-              imageSize = new kakao.maps.Size(30, 33); // 마커이미지의 크기입니다
-
-            // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-            new kakao.maps.Marker({
-              map,
-              position,
-              image: markerImage, // 마커이미지 설정
-            });
           }
         });
       };
     }
-  }, [mapRef, userCoord]);
+  }, [mapRef]);
+
+  const removeMarkers = useCallback(() => {
+    markers.forEach((marker) => marker.setMap(null));
+  }, [markers]);
 
   /**
-   * hook을 호출하는 순간 바로 지도 로딩
+   * 사용자 위치와 추천 가게의 위치의 중간 좌표를 중심점으로 잡고 marker 표시
    */
   useEffect(() => {
-    onLoadKakaoMap();
+    if (kakaoMap) {
+      const positions = markerPositions.map(
+        (pos) => new kakao.maps.LatLng(...pos),
+      );
 
-    return () => {
-      setKakaoMap(undefined);
-    };
-  }, []);
-
-  /**
-   * 사용자 위치와 추천 가게의 위치의 중간 좌표를 중심점으로 잡고 추천가게위치에 marker 표시추가
-   * @param locPosition 위치정보(y, x)
-   */
-  const onSetPlacePosition = useCallback(
-    (locPosition: LatLng) => {
-      if (kakaoMap) {
-        setPlaceMarker((marker) => {
-          marker?.setMap(null);
-          const position = new kakao.maps.LatLng(...locPosition);
-          const imageSrc = '/src/assets/mb_ic_user_gps_position.png', // 마커이미지의 주소입니다
-            imageSize = new kakao.maps.Size(30, 33); // 마커이미지의 크기입니다
-          // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+      /**
+       * markerPosition을 props로 관리하면서 useEffect에서
+       * 마커 삭제하는 함수를 따로 분리 안하면 삭제가 안되는데 정확한 이유는 모르겠음..
+       */
+      removeMarkers();
+      setMarkers(
+        positions.map((position, idx) => {
+          const imageSrc = `/src/assets/mb_ic_${
+            idx === 0 ? 'user_gps' : 'place'
+          }_position.svg`;
+          const imageSize = new kakao.maps.Size(30, 33);
           const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
           return new kakao.maps.Marker({
@@ -102,34 +92,16 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
             position,
             image: markerImage, // 마커이미지 설정
           });
-        });
+        }),
+      );
 
-        // if (positions.length > 0) {
-        //   const bounds = positions.reduce(
-        //     (bounds, latlng) => bounds.extend(latlng),
-        //     new kakao.maps.LatLngBounds()
-        //   );
-
-        //   kakaoMap.setBounds(bounds);
-        // }
-
-        const center = [
-          (userCoord[0] + locPosition[0]) / 2,
-          (userCoord[1] + locPosition[1]) / 2,
-        ] as LatLng;
-        const centerPosition = new kakao.maps.LatLng(...center);
-
-        kakaoMap.setLevel(4, {
-          animate: {
-            duration: 500,
-          },
-          anchor: centerPosition,
-        });
-        kakaoMap.panTo(centerPosition);
+      if (positions.length > 0) {
+        const bounds = new kakao.maps.LatLngBounds();
+        positions.forEach((latlng) => bounds.extend(latlng));
+        kakaoMap.setBounds(bounds);
       }
-    },
-    [kakaoMap, userCoord],
-  );
+    }
+  }, [kakaoMap, markerPositions]);
 
   const onSearchAddrFromCoords = useCallback(
     (
@@ -142,7 +114,7 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
       // 좌표로 행정동 주소 정보를 요청합니다
       geocoder?.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
     },
-    [],
+    [geocoder],
   );
 
   // https://apis.map.kakao.com/web/sample/coord2addr/
@@ -157,7 +129,7 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
       // 좌표로 법정동 상세 주소 정보를 요청합니다
       geocoder?.coord2Address(coords.getLng(), coords.getLat(), callback);
     },
-    [],
+    [geocoder],
   );
 
   // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
@@ -200,7 +172,6 @@ function useKakaoMap({ mapRef, userCoord = DEFAULT_POSITION }: IKakaoMapProps) {
     geocoder,
     jibunAddressName,
     roadAddressName,
-    onSetPlacePosition,
     onSearchAddrFromCoords,
     onSearchDetailAddrFromCoords,
     onDisplayCenterInfo,

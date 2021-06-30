@@ -63,7 +63,8 @@ function Recommend() {
   const [currentMenuIndex, setCurrentMenuIndex] = useState(0);
   const [isChoice, setIsChoice] = useState(false);
   const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
-  const { onSetPlacePosition } = useKakaoMap({ mapRef, userCoord });
+  const [markerPositions, setMarkerPositions] = useState<LatLng[]>([]);
+  useKakaoMap({ mapRef, markerPositions });
   const {
     bestMenuList,
     asyncGetBestMenuList,
@@ -85,6 +86,7 @@ function Recommend() {
       const lng = Number(account.x!!);
       const lat = Number(account.y!!);
       setUserCoord([lat, lng]);
+      setMarkerPositions([[lat, lng]]);
     }
   }, [account]);
 
@@ -96,9 +98,9 @@ function Recommend() {
 
   useEffect(() => {
     if (currentMenu) {
-      onSetPlacePosition([currentMenu.y, currentMenu.x]);
+      setMarkerPositions([[...userCoord], [currentMenu.y, currentMenu.x]]);
     }
-  }, [currentMenu]);
+  }, [currentMenu, userCoord]);
 
   const onReject = useCallback(() => {
     if (currentMenu) {

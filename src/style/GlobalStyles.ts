@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
+// https://www.npmjs.com/package/@fontsource/noto-sans-kr -> 폰트 쉽게 적용해봤는데 bold 처리가 안되서 일단 롤백함
 const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
