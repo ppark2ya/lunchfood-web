@@ -39,6 +39,15 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     min-height: 100vh;
   }
+  select { 
+    -webkit-appearance: none; /* 네이티브 외형 감추기 */ 
+    -moz-appearance: none; 
+    appearance: none; 
+  }
+  /* IE 10, 11의 네이티브 화살표 숨기기 */ 
+  select::-ms-expand { 
+    display: none; 
+  }
 }
 `;
 
