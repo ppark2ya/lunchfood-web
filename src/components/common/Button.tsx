@@ -47,9 +47,9 @@ function styleReducer(props: any) {
 function imageReducer(type?: ButtonType) {
   switch (type) {
     case 'enable':
-      return `background-image: url(/src/assets/mb_ic_fire_enable.png);`;
+      return `background-image: url(/src/assets/mb_ic_fire_enable.svg);`;
     case 'disable':
-      return `background-image: url(/src/assets/mb_ic_fire_disable.png);`;
+      return `background-image: url(/src/assets/mb_ic_fire_disable.svg);`;
     case 'cancel':
       return `display: none;`;
   }

@@ -5,7 +5,7 @@ import { ReactComponent as BackButton } from 'assets/mb_ic_back_btn.svg';
 import { ReactComponent as HeaderLogo } from 'assets/mb_ic_header_logo.svg';
 
 const Container = styled.div`
-  height: 7vh;
+  height: 60px;
   display: flex;
   align-items: center;
   padding: 0px 3vw;

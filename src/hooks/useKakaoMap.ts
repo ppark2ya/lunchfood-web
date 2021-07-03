@@ -21,8 +21,7 @@ interface IKakaoMapProps {
   /**
    * 사용자 위치정보(y, x) -> gps 혹은 계정에 저장된 좌표정보
    */
-  // userCoord: LatLng;
-  markerPositions: LatLng[];
+  markerPositions?: LatLng[];
 }
 /**
  * 참고 URLS
@@ -31,7 +30,7 @@ interface IKakaoMapProps {
  * https://apis.map.kakao.com/web/documentation/#services_Geocoder_coord2RegionCode
  * https://apis.map.kakao.com/web/sample/multipleMarkerImage/
  */
-function useKakaoMap({ mapRef, markerPositions }: IKakaoMapProps) {
+function useKakaoMap({ mapRef, markerPositions = [DEFAULT_POSITION, DEFAULT_POSITION] }: IKakaoMapProps) {
   const [kakaoMap, setKakaoMap] = useState<kakao.maps.Map>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
   const [jibunAddressName, setjibunAddressName] = useState('');
@@ -81,9 +80,8 @@ function useKakaoMap({ mapRef, markerPositions }: IKakaoMapProps) {
       removeMarkers();
       setMarkers(
         positions.map((position, idx) => {
-          const imageSrc = `/src/assets/mb_ic_${
-            idx === 0 ? 'user_gps' : 'place'
-          }_position.svg`;
+          const imageSrc = `/src/assets/mb_ic_${idx === 0 ? 'user_gps' : 'place'
+            }_position.svg`;
           const imageSize = new kakao.maps.Size(30, 33);
           const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 

@@ -1,19 +1,17 @@
 import { useState, useCallback } from 'react';
-import { ApiResponse, AccountPlaceInfo } from 'api/types';
+import { AccountPlaceInfo } from 'api/types';
 import {
   insertSelectedPlace,
   updateFilter,
   getSelectedPlace,
   deleteSelectedPlace,
 } from 'api/filter';
+import { COMMON_MESSAGE } from 'Constants';
 
 function useFilter() {
-  const [insertResult, setInsertResult] = useState<ApiResponse>();
-  const [updateResult, setUpdateResult] = useState<ApiResponse>();
   const [selectedPlaceList, setSelectedPlaceList] = useState<
-    ApiResponse<AccountPlaceInfo[]>
+    AccountPlaceInfo[]
   >();
-  const [deleteResult, setDeleteResult] = useState<ApiResponse>();
 
   const asyncInsertSelectedPlace = useCallback(
     async (requestBody: {
@@ -23,10 +21,13 @@ function useFilter() {
     }) => {
       try {
         const { data } = await insertSelectedPlace(requestBody);
-        setInsertResult(data);
+        if (data.resultCode === 200) {
+          window.alert('자주 이용하는 음식점이 저장되었습니다.');
+        } else {
+          window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
+        }
       } catch (e) {
-        console.error(e);
-        setInsertResult(undefined);
+        window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
       }
     },
     [],
@@ -43,10 +44,13 @@ function useFilter() {
     }) => {
       try {
         const { data } = await updateFilter(requestBody);
-        setUpdateResult(data);
+        if (data.resultCode === 200) {
+          window.alert('내점심줄 정보가 저장되었습니다!');
+        } else {
+          window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
+        }
       } catch (e) {
-        console.error(e);
-        setUpdateResult(undefined);
+        window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
       }
     },
     [],
@@ -55,10 +59,11 @@ function useFilter() {
   const asyncGetSelectedPlace = useCallback(async (id: number) => {
     try {
       const { data } = await getSelectedPlace(id);
-      setSelectedPlaceList(data);
+      if(data.resultCode === 200) {
+        setSelectedPlaceList(data.data);
+      }
     } catch (e) {
-      console.error(e);
-      setSelectedPlaceList(undefined);
+      window.alert(COMMON_MESSAGE.FILTER_MESSAGE.DATA_LOAD_FAIL);
     }
   }, []);
 
@@ -66,20 +71,20 @@ function useFilter() {
     async (requestBody: { id: number; place_id: number }) => {
       try {
         const { data } = await deleteSelectedPlace(requestBody);
-        setDeleteResult(data);
+        if (data.resultCode === 200) {
+          window.alert('삭제되었습니다.');
+        } else {
+          window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
+        }
       } catch (e) {
-        console.error(e);
-        setDeleteResult(undefined);
+        window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
       }
     },
     [],
   );
 
   return {
-    insertResult,
-    updateResult,
     selectedPlaceList,
-    deleteResult,
     asyncInsertSelectedPlace,
     asyncUpdateFilter,
     asyncGetSelectedPlace,

@@ -49,7 +49,7 @@ const Container = styled.div`
   }
 `;
 
-const CancelButton = styled(Button)<{ only: boolean }>`
+const CancelButton = styled(Button) <{ only: boolean }>`
   width: ${(props) => (props.only ? '48%' : '100%')};
   margin-right: ${(props) => (props.only ? '3vw' : 0)};
 `;
@@ -74,7 +74,7 @@ function Recommend() {
   const { id } = localStorage;
 
   useEffect(() => {
-    asyncGetAccount(id);
+    asyncGetAccount();
     asyncGetBestMenuList({
       id: id,
       interval_date: 3,

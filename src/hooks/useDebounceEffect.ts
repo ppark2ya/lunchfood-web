@@ -4,6 +4,7 @@ import {
   ApiResponse,
   AddressApiResponse,
   AddressResponseType,
+  PlaceInfo
 } from 'api/types';
 
 function useDebounceEffect<V>(
@@ -16,7 +17,7 @@ function useDebounceEffect<V>(
   delay = 300,
 ) {
   const [responseData, setResponseData] =
-    useState<ApiResponse | AddressResponseType['juso']>();
+    useState<Array<PlaceInfo|string> | AddressResponseType['juso']>();
 
   useEffect(() => {
     const handler = setTimeout(async () => {
@@ -27,7 +28,7 @@ function useDebounceEffect<V>(
 
         if ('resultCode' in data) {
           if (data.resultCode === 200) {
-            setResponseData(data.data as ApiResponse);
+            setResponseData(data.data as Array<PlaceInfo|string>);
           } else {
             console.error(`resultCode: ${data.resultCode}`);
           }

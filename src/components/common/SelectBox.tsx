@@ -14,18 +14,20 @@ const StyledSelect = styled.select<{ type: SelectType }>`
     props.type === 'enable'
       ? props.theme.color.red
       : props.theme.color.fontGray};
-  font-weight: 500;
+  font-weight: bold;
   font-size: 1.2rem;
   margin-right: 2vw;
 `;
 
 interface IProps {
   options: ISelectOption[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  selectedValue?: number;
   type?: SelectType;
   style?: CSSProperties;
 }
 
-function SelectBox({ options, type = 'enable', style }: IProps) {
+function SelectBox({ options, onChange, selectedValue, type = 'enable', style }: IProps) {
   const optionList = options.map((o) => (
     <option key={o.value} value={o.value}>
       {o.name}
@@ -34,7 +36,7 @@ function SelectBox({ options, type = 'enable', style }: IProps) {
 
   return (
     <>
-      <StyledSelect style={style} type={type}>
+      <StyledSelect style={style} type={type} value={selectedValue} onChange={onChange}>
         {optionList}
       </StyledSelect>
     </>

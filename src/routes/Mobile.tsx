@@ -16,6 +16,8 @@ const MyLocation = lazy(() => import('components/mobile/address/MyLocation'));
 const Recommend = lazy(() => import('components/mobile/recommend/Recommend'));
 const History = lazy(() => import('components/mobile/history/History'));
 const Filter = lazy(() => import('components/mobile/filter/Filter'));
+const Favorites = lazy(() => import('components/mobile/filter/Favorites'));
+const PlaceSearch = lazy(() => import('components/mobile/filter/PlaceSearch'));
 
 function Mobile() {
   return (
@@ -29,7 +31,10 @@ function Mobile() {
           <Route
             path="/main(/address|/recommend|/history|/filter)"
             render={Wrapper}
+            exact
           />
+          <Route path="/main/filter/favorites" component={Favorites} />
+          <Route path="/main/filter/search" component={PlaceSearch} />
         </Switch>
       </Suspense>
     </BrowserRouter>

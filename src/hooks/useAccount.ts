@@ -5,7 +5,7 @@ import { COMMON_MESSAGE } from 'Constants';
 
 function useAccount() {
   const [account, setAccount] = useState<Account>();
-  const asyncGetAccount = useCallback(async (id: number) => {
+  const asyncGetAccount = useCallback(async () => {
     try {
       if (localStorage.id) {
         const { data } = await getAccount({ id: localStorage.id });
@@ -25,6 +25,7 @@ function useAccount() {
 
   return {
     account,
+    setAccount,
     asyncGetAccount,
   };
 }

@@ -44,7 +44,6 @@ function MyLocation() {
     onDisplayAddressName,
   } = useKakaoMap({
     mapRef,
-    userCoord,
   });
   const { asyncUpdateLocation } = useAddress();
 

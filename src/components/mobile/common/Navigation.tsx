@@ -12,7 +12,7 @@ const Container = styled.div`
   bottom: 0;
   display: flex;
   width: 100vw;
-  height: 8vh;
+  height: 70px;
   background-color: #fafafa;
   padding-top: 0.5vh;
 `;
@@ -24,14 +24,12 @@ const Content = styled.div<{ isActive: boolean; path: string }>`
     svg {
       width: ${(props) => (props.path === '/main/recommend' ? '5vw' : '4vw')};
       path {
-        fill: ${(props) =>
-          props.isActive ? props.theme.color.red : props.theme.color.fontGray};
+        fill: ${(props) => props.isActive ? props.theme.color.red : props.theme.color.fontGray};
       }
     }
   }
   .title {
-    color: ${(props) =>
-      props.isActive ? props.theme.color.red : props.theme.color.fontGray};
+    color: ${(props) => props.isActive ? props.theme.color.red : props.theme.color.fontGray};
   }
 `;
 
