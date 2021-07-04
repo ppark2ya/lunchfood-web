@@ -24,18 +24,18 @@ function PlaceSearch() {
   const history = useHistory();
   const { insertPlaceSuccess, asyncInsertSelectedPlace } = useFilter();
   const [value, onChange, onClear] = useInput('');
-  const placeInfoList = useDebounceEffect(getPlaceAuto, value);
+  const placeInfoList = useDebounceEffect(getPlaceAuto, value) as PlaceInfo[];
 
   const addressItems = placeInfoList?.map((placeInfo) => (
     <AddressItem 
-      key={(placeInfo as PlaceInfo).id}
-      jibunAddr={(placeInfo as PlaceInfo).place_name}
-      roadAddr={(placeInfo as PlaceInfo).road_address_name}
+      key={placeInfo.id}
+      jibunAddr={placeInfo.place_name}
+      roadAddr={placeInfo.road_address_name}
       onAddressClick={() => {
         asyncInsertSelectedPlace({
           id: localStorage.id,
-          place_id: (placeInfo as PlaceInfo).id,
-          place_name: (placeInfo as PlaceInfo).place_name
+          place_id: placeInfo.id,
+          place_name: placeInfo.place_name
         })
       }}
     />
