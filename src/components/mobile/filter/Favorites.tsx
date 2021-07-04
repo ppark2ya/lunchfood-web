@@ -37,14 +37,18 @@ function Favorites() {
     <>
       <Header />
       <Container>
-        <FavoriteList 
-          items={selectedPlaceList} 
-          onDelete={asyncDeleteSelectedPlace} />
         <RegistButton 
           componentType="enable" 
           onClick={() => history.push('/main/filter/search')}>
           음식점 등록하기
         </RegistButton>
+        {
+          location.state?.id &&
+          <FavoriteList 
+            items={selectedPlaceList} 
+            id={location.state.id}
+            onDelete={asyncDeleteSelectedPlace} />
+        }
       </Container>
     </>
   );

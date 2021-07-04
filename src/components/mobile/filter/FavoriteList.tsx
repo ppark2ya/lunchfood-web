@@ -1,18 +1,23 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 import { AccountPlaceInfo } from 'api/types';
 import FavoriteItem from './FavoriteItem';
 
 interface IProps {
   items?: AccountPlaceInfo[];
-  onDelete: any;
+  id: number;
+  onDelete: (requestBody: { id: number; place_id: number }) => Promise<void>;
 }
-function FavoriteList({ items, onDelete }: IProps) {
+
+function FavoriteList({ items, id, onDelete }: IProps) {
 
   const favoriteItems = items?.map((item, index) => (
     <FavoriteItem
       key={index}
       {...item}
-      onDelete={onDelete}
+      onDelete={() => onDelete({
+        id,
+        place_id: item.place_id
+      })}
     />
   ));
   return <div>{favoriteItems}</div>;
