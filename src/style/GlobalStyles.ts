@@ -48,7 +48,6 @@ const GlobalStyle = createGlobalStyle`
   select::-ms-expand { 
     display: none; 
   }
-}
 `;
 
 export default GlobalStyle;
