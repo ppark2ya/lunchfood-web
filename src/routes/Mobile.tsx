@@ -15,6 +15,7 @@ const Address = lazy(() => import('components/mobile/address/Address'));
 const MyLocation = lazy(() => import('components/mobile/address/MyLocation'));
 const Recommend = lazy(() => import('components/mobile/recommend/Recommend'));
 const History = lazy(() => import('components/mobile/history/History'));
+const DayMenu = lazy(() => import('components/mobile/history/DayMenu'));
 const Filter = lazy(() => import('components/mobile/filter/Filter'));
 const Favorites = lazy(() => import('components/mobile/filter/Favorites'));
 const PlaceSearch = lazy(() => import('components/mobile/filter/PlaceSearch'));
@@ -25,16 +26,17 @@ function Mobile() {
       <Suspense fallback={<Loading isLoading={true} />}>
         <Switch>
           <Route path="/" component={Intro} exact />
-          <Route path="/login" component={Login} />
-          <Route path="/address" component={Address} />
-          <Route path="/mylocation" component={MyLocation} />
+          <Route path="/login" component={Login} exact />
+          <Route path="/address" component={Address} exact />
+          <Route path="/mylocation" component={MyLocation} exact />
           <Route
             path="/main(/address|/recommend|/history|/filter)"
             render={Wrapper}
             exact
           />
-          <Route path="/main/filter/favorites" component={Favorites} />
-          <Route path="/main/filter/search" component={PlaceSearch} />
+          <Route path="/main/history/dayMenu" component={DayMenu} exact />
+          <Route path="/main/filter/favorites" component={Favorites} exact />
+          <Route path="/main/filter/search" component={PlaceSearch} exact />
         </Switch>
       </Suspense>
     </BrowserRouter>

@@ -2,10 +2,9 @@ import { useState, useCallback } from 'react';
 import { getPlaceHistory, insertDayMenu, deleteDayMenu } from 'api/history';
 import { ApiResponse, HistoryDayMenu } from 'api/types';
 
-function useHistory() {
-  const [historyDayMenuList, setHistoryDayMenuList] = useState<
-    ApiResponse<HistoryDayMenu[]>
-  >();
+function useDayHistory() {
+  const [historyDayMenuList, setHistoryDayMenuList] =
+    useState<ApiResponse<HistoryDayMenu[]>>();
   const [insertResult, setInsertResult] = useState<ApiResponse>();
   const [deleteResult, setDeleteResult] = useState<ApiResponse>();
 
@@ -63,4 +62,4 @@ function useHistory() {
   };
 }
 
-export default useHistory;
+export default useDayHistory;

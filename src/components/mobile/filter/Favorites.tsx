@@ -21,34 +21,32 @@ const RegistButton = styled(Button)`
 function Favorites() {
   const history = useHistory();
   const location = history.location as Location<{ id: number }>;
-  const { 
-    selectedPlaceList, 
-    asyncGetSelectedPlace, 
-    asyncDeleteSelectedPlace,
-  } = useFilter();
+  const { selectedPlaceList, asyncGetSelectedPlace, asyncDeleteSelectedPlace } =
+    useFilter();
 
   useEffect(() => {
-    if(location.state?.id) {
+    if (location.state?.id) {
       asyncGetSelectedPlace(location.state?.id);
     }
   }, [location.state?.id]);
 
   return (
     <>
-      <Header />
+      <Header>자주 이용하는 음식점</Header>
       <Container>
-        <RegistButton 
-          componentType="enable" 
-          onClick={() => history.push('/main/filter/search')}>
+        <RegistButton
+          componentType="enable"
+          onClick={() => history.push('/main/filter/search')}
+        >
           음식점 등록하기
         </RegistButton>
-        {
-          location.state?.id &&
-          <FavoriteList 
-            items={selectedPlaceList} 
+        {location.state?.id && (
+          <FavoriteList
+            items={selectedPlaceList}
             id={location.state.id}
-            onDelete={asyncDeleteSelectedPlace} />
-        }
+            onDelete={asyncDeleteSelectedPlace}
+          />
+        )}
       </Container>
     </>
   );

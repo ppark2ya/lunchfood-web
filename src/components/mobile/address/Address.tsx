@@ -17,10 +17,6 @@ const Container = styled.div`
   padding: 2vh 4vw;
 `;
 
-const StyledInput = styled(Input)`
-  margin-bottom: 1vh;
-`;
-
 function Address() {
   const [value, onChange, onClear] = useInput('');
   const items = useDebounceEffect(getAddressList, value) as AddressRoadItem[];
@@ -53,7 +49,7 @@ function Address() {
   return (
     <>
       <Container>
-        <StyledInput
+        <Input
           mode="edit"
           value={value}
           onChange={onChange}

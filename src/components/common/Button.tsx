@@ -1,4 +1,4 @@
-import React, { ReactChild, CSSProperties } from 'react';
+import React, { ReactChild, CSSProperties, memo } from 'react';
 import styled from 'styled-components';
 import { ICommonStyleProps } from 'style/types';
 
@@ -69,4 +69,4 @@ function Button(props: IButtonProps) {
   return <StyledButton {...props}>{props.children}</StyledButton>;
 }
 
-export default Button;
+export default memo(Button);

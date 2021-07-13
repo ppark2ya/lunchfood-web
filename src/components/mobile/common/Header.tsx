@@ -8,12 +8,13 @@ const Container = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
-  padding: 0px 3vw;
+  padding: 0px 4vw;
   box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.05);
 
   .header-text {
     text-align: center;
     width: 100%;
+    font-weight: bold;
   }
 `;
 

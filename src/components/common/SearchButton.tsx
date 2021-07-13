@@ -11,7 +11,6 @@ const StyledButton = styled.div`
   background-position: center;
   border: 1px solid ${(props) => props.theme.color.backGray};
   margin-left: 1%;
-  float: left;
 `;
 
 function SearchButton(props: any) {

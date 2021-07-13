@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import loadingGif from 'assets/loading.gif';
 
 const Background = styled.div`
-  background: rgba(0, 0, 0, 0.25);
+  background: white;
   position: fixed;
   left: 0;
   top: 0;
@@ -18,7 +18,7 @@ const Background = styled.div`
 const LoadingImage = styled.img.attrs({
   alt: 'close icon',
 })`
-  width: 30px;
+  width: 20vw;
 `;
 
 interface ILoadingProps {

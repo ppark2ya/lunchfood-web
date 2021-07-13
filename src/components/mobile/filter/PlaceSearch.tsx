@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Header from 'components/mobile/common/Header';
 import useFilter from 'hooks/useFilter';
@@ -9,15 +9,9 @@ import Input from 'components/common/Input';
 import useInput from 'hooks/useInput';
 import AddressItem from 'components/common/AddressItem';
 import { PlaceInfo } from 'api/types';
-import { useEffect } from 'react';
 
 const Container = styled.div`
   padding: 4vw;
-
-  .blank {
-    display: inline-block;
-    width: 100%;
-  }
 `;
 
 function PlaceSearch() {
@@ -27,7 +21,7 @@ function PlaceSearch() {
   const placeInfoList = useDebounceEffect(getPlaceAuto, value) as PlaceInfo[];
 
   const addressItems = placeInfoList?.map((placeInfo) => (
-    <AddressItem 
+    <AddressItem
       key={placeInfo.id}
       jibunAddr={placeInfo.place_name}
       roadAddr={placeInfo.road_address_name}
@@ -35,29 +29,29 @@ function PlaceSearch() {
         asyncInsertSelectedPlace({
           id: localStorage.id,
           place_id: placeInfo.id,
-          place_name: placeInfo.place_name
-        })
+          place_name: placeInfo.place_name,
+        });
       }}
     />
   ));
 
   useEffect(() => {
-    if(insertPlaceSuccess) {
+    if (insertPlaceSuccess) {
       history.goBack();
     }
   }, [insertPlaceSuccess]);
 
   return (
     <>
-      <Header />
+      <Header>자주 이용하는 음식점</Header>
       <Container>
-        <Input 
-          mode="edit" 
-          value={value} 
-          onChange={onChange} 
-          onClear={onClear} 
-          placeholder="식당명을 입력해주세요."/>
-        <div className="blank"></div>
+        <Input
+          mode="edit"
+          value={value}
+          onChange={onChange}
+          onClear={onClear}
+          placeholder="식당명을 입력해주세요."
+        />
         {value !== '' && addressItems}
       </Container>
     </>
