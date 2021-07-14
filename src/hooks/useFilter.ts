@@ -9,10 +9,8 @@ import {
 import { COMMON_MESSAGE } from 'Constants';
 
 function useFilter() {
-  const [selectedPlaceList, setSelectedPlaceList] = useState<
-    AccountPlaceInfo[]
-  >();
-  const [insertPlaceSuccess, setInsertPlaceSuccess] = useState(false);
+  const [selectedPlaceList, setSelectedPlaceList] =
+    useState<AccountPlaceInfo[]>();
 
   const asyncInsertSelectedPlace = useCallback(
     async (requestBody: {
@@ -24,14 +22,14 @@ function useFilter() {
         const { data } = await insertSelectedPlace(requestBody);
         if (data.resultCode === 200) {
           window.alert('자주 이용하는 음식점이 저장되었습니다.');
-          setInsertPlaceSuccess(true);
+          return Promise.resolve(requestBody.place_name);
         } else {
           window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
-          setInsertPlaceSuccess(false);
+          return Promise.reject(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
         }
       } catch (e) {
         window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
-        setInsertPlaceSuccess(false);
+        return Promise.reject(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
       }
     },
     [],
@@ -63,7 +61,7 @@ function useFilter() {
   const asyncGetSelectedPlace = useCallback(async (id: number) => {
     try {
       const { data } = await getSelectedPlace(id);
-      if(data.resultCode === 200) {
+      if (data.resultCode === 200) {
         setSelectedPlaceList(data.data);
       } else {
         setSelectedPlaceList(undefined);
@@ -77,7 +75,7 @@ function useFilter() {
   const asyncDeleteSelectedPlace = useCallback(
     async (requestBody: { id: number; place_id: number }) => {
       try {
-        if(window.confirm('삭제하시겠습니까?')) {
+        if (window.confirm('삭제하시겠습니까?')) {
           const { data } = await deleteSelectedPlace(requestBody);
           if (data.resultCode === 200) {
             window.alert('삭제되었습니다.');
@@ -95,7 +93,6 @@ function useFilter() {
 
   return {
     selectedPlaceList,
-    insertPlaceSuccess,
     asyncInsertSelectedPlace,
     asyncUpdateFilter,
     asyncGetSelectedPlace,

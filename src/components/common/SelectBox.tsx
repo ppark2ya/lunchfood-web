@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, memo } from 'react';
 import styled from 'styled-components';
 import { ISelectOption } from 'Constants';
 
@@ -27,7 +27,13 @@ interface IProps {
   style?: CSSProperties;
 }
 
-function SelectBox({ options, onChange, selectedValue, type = 'enable', style }: IProps) {
+function SelectBox({
+  options,
+  onChange,
+  selectedValue,
+  type = 'enable',
+  style,
+}: IProps) {
   const optionList = options.map((o) => (
     <option key={o.value} value={o.value}>
       {o.name}
@@ -36,11 +42,16 @@ function SelectBox({ options, onChange, selectedValue, type = 'enable', style }:
 
   return (
     <>
-      <StyledSelect style={style} type={type} value={selectedValue} onChange={onChange}>
+      <StyledSelect
+        style={style}
+        type={type}
+        value={selectedValue}
+        onChange={onChange}
+      >
         {optionList}
       </StyledSelect>
     </>
   );
 }
 
-export default SelectBox;
+export default memo(SelectBox);

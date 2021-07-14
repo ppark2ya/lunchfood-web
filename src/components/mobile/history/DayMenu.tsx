@@ -7,6 +7,7 @@ import Input from 'components/common/Input';
 import useDayHistory from 'hooks/useDayHistory';
 import { useHistory } from 'react-router-dom';
 import Button from 'components/common/Button';
+import { Location } from 'history';
 
 const Container = styled.form`
   padding: 4vw;
@@ -34,19 +35,24 @@ const Container = styled.form`
 
 function DayMenu() {
   const history = useHistory();
+  const { state } = history.location as Location<{ placeName: string }>;
   const { asyncInsertDayMenu } = useDayHistory();
 
   const onPlaceSearchPage = useCallback(() => {
-    // 로직이 달라서 컴포넌트 따로 딸지 고민
-    history.push('/main/filter/search');
+    history.push({
+      pathname: '/main/filter/search',
+      state: {
+        from: '/main/history/dayMenu',
+      },
+    });
   }, []);
 
   const onFoodSearchPage = useCallback(() => {
-    history.push('/');
+    history.push('/main/history/food_search');
   }, []);
 
   return (
-    <>
+    <div>
       <Header>데이메뉴 등록</Header>
       <Container>
         <div className="history-date">2021년 7월 13일의 메뉴</div>
@@ -62,7 +68,7 @@ function DayMenu() {
         <hr />
         <Input
           mode="view"
-          value=""
+          value={state?.placeName ?? ''}
           label="음식점"
           onClick={onPlaceSearchPage}
         />
@@ -86,7 +92,7 @@ function DayMenu() {
         />
         <Button componentType="enable">등록</Button>
       </Container>
-    </>
+    </div>
   );
 }
 

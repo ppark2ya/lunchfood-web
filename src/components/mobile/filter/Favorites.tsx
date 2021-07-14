@@ -31,7 +31,7 @@ function Favorites() {
   }, [location.state?.id]);
 
   return (
-    <>
+    <div>
       <Header>자주 이용하는 음식점</Header>
       <Container>
         <RegistButton
@@ -48,7 +48,7 @@ function Favorites() {
           />
         )}
       </Container>
-    </>
+    </div>
   );
 }
 

@@ -22,7 +22,7 @@ const EditText = styled.div<ICommonStyleProps>`
   input {
     color: ${(props) => props.theme.color.black};
     font-size: 1rem;
-    padding-left: 2rem;
+    padding-left: 1rem;
     width: 90%;
   }
 

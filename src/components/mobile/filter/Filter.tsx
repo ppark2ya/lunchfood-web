@@ -46,24 +46,30 @@ function Filter() {
     asyncGetAccount();
   }, []);
 
-  const onToggleButtonState = useCallback((type: 'radius_on' | 'place_on' | 'date_on') => {
-    setAccount((prev) => {
-      return {
-        ...prev,
-        [type]: prev!![type] ? 0 : 1
-      } as Account
-    })
-  }, []);
+  const onToggleButtonState = useCallback(
+    (type: 'radius_on' | 'place_on' | 'date_on') => {
+      setAccount((prev) => {
+        return {
+          ...prev,
+          [type]: prev!![type] ? 0 : 1,
+        } as Account;
+      });
+    },
+    [],
+  );
 
-  const onSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>, type: string) => {
-    const { value } = event.target;
-    setAccount((prev) => {
-      return {
-        ...prev,
-        [type]: value
-      } as Account
-    })
-  }, []);
+  const onSelectChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>, type: string) => {
+      const { value } = event.target;
+      setAccount((prev) => {
+        return {
+          ...prev,
+          [type]: value,
+        } as Account;
+      });
+    },
+    [],
+  );
 
   return (
     <Container>
@@ -79,8 +85,9 @@ function Filter() {
           까지 검색할래요!
         </div>
         <Button
-          componentType={account?.radius_on ? "enable" : "disable"}
-          onClick={() => onToggleButtonState('radius_on')}>
+          componentType={account?.radius_on ? 'enable' : 'disable'}
+          onClick={() => onToggleButtonState('radius_on')}
+        >
           거리제한 사용
         </Button>
       </ContentBox>
@@ -91,17 +98,18 @@ function Filter() {
             width={11}
             onClick={() => {
               history.push({
-                pathname: '/main/filter/favorites', 
-                state: { 
-                  id: localStorage.id 
-                }
-              })
+                pathname: '/main/filter/favorites',
+                state: {
+                  id: localStorage.id,
+                },
+              });
             }}
           />
         </div>
         <Button
-          componentType={account?.place_on ? "enable" : "disable"}
-          onClick={() => onToggleButtonState('place_on')}>
+          componentType={account?.place_on ? 'enable' : 'disable'}
+          onClick={() => onToggleButtonState('place_on')}
+        >
           제한추천 사용
         </Button>
       </ContentBox>
@@ -110,27 +118,34 @@ function Filter() {
           <SelectBox
             options={LIMIT_DATE_LIST}
             onChange={(e) => onSelectChange(e, 'set_date')}
-            selectedValue={account?.set_date} />
+            selectedValue={account?.set_date}
+          />
           동안 안먹은 것만 추천받을래요!
         </div>
         <Button
-          componentType={account?.date_on ? "enable" : "disable"}
-          onClick={() => onToggleButtonState('date_on')}>
+          componentType={account?.date_on ? 'enable' : 'disable'}
+          onClick={() => onToggleButtonState('date_on')}
+        >
           중복추천 사용
         </Button>
       </ContentBox>
-      <SaveButton componentType={account ? "enable" : "disable"} onClick={() => {
-        if (account) {
-          asyncUpdateFilter({
-            id: localStorage.id,
-            radius: account.radius!!,
-            radius_on: account.radius_on!!,
-            place_on: account.place_on!!,
-            set_date: account.set_date!!,
-            date_on: account.date_on!!,
-          })
-        }
-      }}>저장</SaveButton>
+      <SaveButton
+        componentType={account ? 'enable' : 'disable'}
+        onClick={() => {
+          if (account) {
+            asyncUpdateFilter({
+              id: localStorage.id,
+              radius: account.radius!!,
+              radius_on: account.radius_on!!,
+              place_on: account.place_on!!,
+              set_date: account.set_date!!,
+              date_on: account.date_on!!,
+            });
+          }
+        }}
+      >
+        저장
+      </SaveButton>
     </Container>
   );
 }

@@ -8,7 +8,7 @@ import Button from 'components/common/Button';
 import { getAddressList } from 'api/address';
 import { AddressRoadItem } from 'api/types';
 import AddressList from '../../common/AddressList';
-import getGeoLocation from 'utils/getGeoLocation';
+import getGeoLocation, { geoLocationClear } from 'utils/getGeoLocation';
 import { useHistory } from 'react-router-dom';
 import { DEFAULT_POSITION, LatLng } from 'Constants';
 
@@ -26,13 +26,14 @@ function Address() {
   const history = useHistory();
 
   useEffect(() => {
-    getGeoLocation(function (position: GeolocationPosition) {
+    const watchId = getGeoLocation(function (position: GeolocationPosition) {
       const {
         coords: { latitude, longitude },
       } = position;
       setUserCoord([latitude, longitude]);
       setShouldKakaoMap(true);
     });
+    () => geoLocationClear(watchId);
   }, []);
 
   const onAddressSearchClick = useCallback(() => {
@@ -47,24 +48,22 @@ function Address() {
   }, [shouldKakaoMap, userCoord]);
 
   return (
-    <>
-      <Container>
-        <Input
-          mode="edit"
-          value={value}
-          onChange={onChange}
-          onClear={onClear}
-          placeholder="동명(읍/면)으로 검색(EX. 신림동)"
-        />
-        <Button componentType="enable" onClick={onAddressSearchClick}>
-          내 위치로 검색하기
-        </Button>
-        <AddressList
-          items={value !== '' ? items : undefined}
-          onAddressClick={onAddressClick}
-        />
-      </Container>
-    </>
+    <Container>
+      <Input
+        mode="edit"
+        value={value}
+        onChange={onChange}
+        onClear={onClear}
+        placeholder="동명(읍/면)으로 검색(EX. 신림동)"
+      />
+      <Button componentType="enable" onClick={onAddressSearchClick}>
+        내 위치로 검색하기
+      </Button>
+      <AddressList
+        items={value !== '' ? items : undefined}
+        onAddressClick={onAddressClick}
+      />
+    </Container>
   );
 }
 

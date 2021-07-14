@@ -9,6 +9,7 @@ import Input from 'components/common/Input';
 import useInput from 'hooks/useInput';
 import AddressItem from 'components/common/AddressItem';
 import { PlaceInfo } from 'api/types';
+import { Location } from 'history';
 
 const Container = styled.div`
   padding: 4vw;
@@ -16,7 +17,8 @@ const Container = styled.div`
 
 function PlaceSearch() {
   const history = useHistory();
-  const { insertPlaceSuccess, asyncInsertSelectedPlace } = useFilter();
+  const location = history.location as Location<{ from: string }>;
+  const { asyncInsertSelectedPlace } = useFilter();
   const [value, onChange, onClear] = useInput('');
   const placeInfoList = useDebounceEffect(getPlaceAuto, value) as PlaceInfo[];
 
@@ -30,19 +32,24 @@ function PlaceSearch() {
           id: localStorage.id,
           place_id: placeInfo.id,
           place_name: placeInfo.place_name,
+        }).then((placeName: string) => {
+          if (location.state?.from) {
+            history.push({
+              pathname: location.state.from,
+              state: {
+                placeName,
+              },
+            });
+          } else {
+            history.goBack();
+          }
         });
       }}
     />
   ));
 
-  useEffect(() => {
-    if (insertPlaceSuccess) {
-      history.goBack();
-    }
-  }, [insertPlaceSuccess]);
-
   return (
-    <>
+    <div>
       <Header>자주 이용하는 음식점</Header>
       <Container>
         <Input
@@ -54,7 +61,7 @@ function PlaceSearch() {
         />
         {value !== '' && addressItems}
       </Container>
-    </>
+    </div>
   );
 }
 

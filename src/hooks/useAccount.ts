@@ -12,14 +12,18 @@ function useAccount() {
 
         if (data.resultCode === 200) {
           setAccount(data.data);
+          return Promise.resolve(data.data!!);
         } else {
           window.alert(COMMON_MESSAGE.ACCOUNT_MESSAGE.NO_RESULT);
+          return Promise.reject(COMMON_MESSAGE.ACCOUNT_MESSAGE.NO_RESULT);
         }
       } else {
         window.alert(COMMON_MESSAGE.ACCOUNT_MESSAGE.LOAD_FAIL);
+        return Promise.reject(COMMON_MESSAGE.ACCOUNT_MESSAGE.NO_RESULT);
       }
     } catch (e) {
       window.alert(COMMON_MESSAGE.ACCOUNT_MESSAGE.LOAD_FAIL);
+      return Promise.reject(COMMON_MESSAGE.ACCOUNT_MESSAGE.NO_RESULT);
     }
   }, []);
 

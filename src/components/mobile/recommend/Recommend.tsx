@@ -2,12 +2,13 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import useKakaoMap from 'hooks/useKakaoMap';
 import useRecommend from 'hooks/useRecommend';
-import useAccount from 'hooks/useAccount';
 import { DEFAULT_POSITION, LatLng } from 'Constants';
 import Button from 'components/common/Button';
 import { ReactComponent as TodayMenuIcon } from 'assets/mb_ic_today_menu.svg';
 import isEmpty from 'utils/isEmpty';
 import { BestMenu } from 'api/types';
+import { useLocation } from 'react-router-dom';
+import { Location } from 'history';
 
 const Container = styled.div`
   padding: 3vh 4vw;
@@ -49,7 +50,7 @@ const Container = styled.div`
   }
 `;
 
-const CancelButton = styled(Button) <{ only: boolean }>`
+const CancelButton = styled(Button)<{ only: boolean }>`
   width: ${(props) => (props.only ? '48%' : '100%')};
   margin-right: ${(props) => (props.only ? '3vw' : 0)};
 `;
@@ -58,6 +59,7 @@ const mapSize = {
   height: '45vh',
 };
 function Recommend() {
+  const location: Location<{ latlng: LatLng }> = useLocation();
   const mapRef = useRef<HTMLDivElement>(null);
   const [currentMenu, setCurrentMenu] = useState<BestMenu>();
   const [currentMenuIndex, setCurrentMenuIndex] = useState(0);
@@ -65,30 +67,23 @@ function Recommend() {
   const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
   const [markerPositions, setMarkerPositions] = useState<LatLng[]>([]);
   useKakaoMap({ mapRef, markerPositions });
-  const {
-    bestMenuList,
-    asyncGetBestMenuList,
-    asyncInsertHistory,
-  } = useRecommend();
-  const { account, asyncGetAccount } = useAccount();
+  const { bestMenuList, asyncGetBestMenuList, asyncInsertHistory } =
+    useRecommend();
   const { id } = localStorage;
 
   useEffect(() => {
-    asyncGetAccount();
     asyncGetBestMenuList({
-      id: id,
+      id,
       interval_date: 3,
     });
   }, [id]);
 
   useEffect(() => {
-    if (account) {
-      const lng = Number(account.x!!);
-      const lat = Number(account.y!!);
-      setUserCoord([lat, lng]);
-      setMarkerPositions([[lat, lng]]);
+    if (location.state?.latlng) {
+      setUserCoord(location.state.latlng);
+      setMarkerPositions([location.state.latlng]);
     }
-  }, [account]);
+  }, [location.state?.latlng]);
 
   useEffect(() => {
     if (!isEmpty(bestMenuList)) {

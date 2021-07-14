@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Location } from 'history';
 import { COMMON_MESSAGE, LatLng } from 'Constants';
 import styled from 'styled-components';
