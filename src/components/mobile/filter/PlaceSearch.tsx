@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Header from 'components/mobile/common/Header';
 import useFilter from 'hooks/useFilter';
@@ -10,6 +10,8 @@ import useInput from 'hooks/useInput';
 import AddressItem from 'components/common/AddressItem';
 import { PlaceInfo } from 'api/types';
 import { Location } from 'history';
+import { useSetRecoilState } from 'recoil';
+import { placeNameState } from 'store/recoil/history/state';
 
 const Container = styled.div`
   padding: 4vw;
@@ -21,6 +23,7 @@ function PlaceSearch() {
   const { asyncInsertSelectedPlace } = useFilter();
   const [value, onChange, onClear] = useInput('');
   const placeInfoList = useDebounceEffect(getPlaceAuto, value) as PlaceInfo[];
+  const setPlaceNameRecoilState = useSetRecoilState(placeNameState);
 
   const addressItems = placeInfoList?.map((placeInfo) => (
     <AddressItem
@@ -28,29 +31,27 @@ function PlaceSearch() {
       jibunAddr={placeInfo.place_name}
       roadAddr={placeInfo.road_address_name}
       onAddressClick={() => {
-        asyncInsertSelectedPlace({
-          id: localStorage.id,
-          place_id: placeInfo.id,
-          place_name: placeInfo.place_name,
-        }).then((placeName: string) => {
-          if (location.state?.from) {
-            history.push({
-              pathname: location.state.from,
-              state: {
-                placeName,
-              },
-            });
-          } else {
+        if (location.state?.from) {
+          setPlaceNameRecoilState(placeInfo.place_name);
+          history.replace({
+            pathname: location.state.from,
+          });
+        } else {
+          asyncInsertSelectedPlace({
+            id: localStorage.id,
+            place_id: placeInfo.id,
+            place_name: placeInfo.place_name,
+          }).then(() => {
             history.goBack();
-          }
-        });
+          });
+        }
       }}
     />
   ));
 
   return (
     <div>
-      <Header>자주 이용하는 음식점</Header>
+      <Header>음식점 검색</Header>
       <Container>
         <Input
           mode="edit"

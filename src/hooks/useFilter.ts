@@ -22,14 +22,11 @@ function useFilter() {
         const { data } = await insertSelectedPlace(requestBody);
         if (data.resultCode === 200) {
           window.alert('자주 이용하는 음식점이 저장되었습니다.');
-          return Promise.resolve(requestBody.place_name);
         } else {
           window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
-          return Promise.reject(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
         }
       } catch (e) {
         window.alert(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
-        return Promise.reject(COMMON_MESSAGE.FILTER_MESSAGE.SAVE_FAIL);
       }
     },
     [],

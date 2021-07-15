@@ -4,7 +4,7 @@ import { ApiResponse, HistoryDayMenu } from 'api/types';
 
 function useDayHistory() {
   const [historyDayMenuList, setHistoryDayMenuList] =
-    useState<ApiResponse<HistoryDayMenu[]>>();
+    useState<HistoryDayMenu[]>();
   const [insertResult, setInsertResult] = useState<ApiResponse>();
   const [deleteResult, setDeleteResult] = useState<ApiResponse>();
 
@@ -17,7 +17,11 @@ function useDayHistory() {
     }) => {
       try {
         const { data } = await getPlaceHistory(requestBody);
-        setHistoryDayMenuList(data);
+        if (data.resultCode === 200) {
+          setHistoryDayMenuList(data.data);
+        } else {
+          setHistoryDayMenuList(undefined);
+        }
       } catch (e) {
         console.error(e);
         setHistoryDayMenuList(undefined);
@@ -30,7 +34,11 @@ function useDayHistory() {
     async (requestBody: HistoryDayMenu) => {
       try {
         const { data } = await insertDayMenu(requestBody);
-        setInsertResult(data);
+        if (data.resultCode === 200) {
+          setInsertResult(data);
+        } else {
+          setInsertResult(undefined);
+        }
       } catch (e) {
         console.error(e);
         setInsertResult(undefined);
@@ -43,7 +51,11 @@ function useDayHistory() {
     async (requestBody: { id: number; date: string }) => {
       try {
         const { data } = await deleteDayMenu(requestBody);
-        setDeleteResult(data);
+        if (data.resultCode === 200) {
+          setDeleteResult(data);
+        } else {
+          setDeleteResult(undefined);
+        }
       } catch (e) {
         console.error(e);
         setDeleteResult(undefined);

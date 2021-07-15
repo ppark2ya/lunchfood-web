@@ -10,13 +10,13 @@ function useInput<T>(initialValue: T): ReturnType<T> {
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue((event.target.value as unknown) as T);
+      setValue(event.target.value as unknown as T);
     },
     [setValue],
   );
 
   const onClear = useCallback(() => {
-    setValue(('' as unknown) as T);
+    setValue('' as unknown as T);
   }, [setValue]);
 
   return [value, onChange, onClear];

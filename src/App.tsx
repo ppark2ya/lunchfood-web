@@ -5,6 +5,7 @@ import Mobile from 'routes/Mobile';
 import useComponentWillMount from 'hooks/useComponentWillMount';
 import apiClient from 'api/apiClient';
 import Loading from 'components/common/Loading';
+import { RecoilRoot } from 'recoil';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +52,14 @@ function App() {
   }, []);
 
   const MountedComponent = useMemo(
-    () => (isMobile ? <Mobile /> : <Browser />),
+    () =>
+      isMobile ? (
+        <RecoilRoot>
+          <Mobile />
+        </RecoilRoot>
+      ) : (
+        <Browser />
+      ),
     [isMobile],
   );
 

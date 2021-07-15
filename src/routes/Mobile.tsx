@@ -17,6 +17,7 @@ import DayMenu from 'components/mobile/history/DayMenu';
 import Filter from 'components/mobile/filter/Filter';
 import Favorites from 'components/mobile/filter/Favorites';
 import PlaceSearch from 'components/mobile/filter/PlaceSearch';
+import FoodSearch from 'components/mobile/history/FoodSearch';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 function Mobile() {
@@ -37,6 +38,11 @@ function Mobile() {
                   exact
                 />
                 <Route path="/main/history/dayMenu" component={DayMenu} exact />
+                <Route
+                  path="/main/history/food_search"
+                  component={FoodSearch}
+                  exact
+                />
                 <Route
                   path="/main/filter/favorites"
                   component={Favorites}

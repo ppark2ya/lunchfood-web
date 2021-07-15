@@ -21,9 +21,10 @@ const Container = styled.div`
 interface IHeaderProps {
   children?: ReactChild;
   isBackBtn?: boolean;
+  onBackClick?: () => void;
 }
 
-function Header({ children, isBackBtn = true }: IHeaderProps) {
+function Header({ children, isBackBtn = true, onBackClick }: IHeaderProps) {
   const history = useHistory();
 
   const onBackBtnClick = useCallback(() => {
@@ -32,7 +33,9 @@ function Header({ children, isBackBtn = true }: IHeaderProps) {
 
   return (
     <Container>
-      {isBackBtn && <BackButton width="2vw" onClick={onBackBtnClick} />}
+      {isBackBtn && (
+        <BackButton width="2vw" onClick={onBackClick ?? onBackBtnClick} />
+      )}
       <div className="header-text">
         {children ? children : <HeaderLogo width="30vw" />}
       </div>
