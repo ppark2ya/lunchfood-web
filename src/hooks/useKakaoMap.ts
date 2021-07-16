@@ -30,7 +30,10 @@ interface IKakaoMapProps {
  * https://apis.map.kakao.com/web/documentation/#services_Geocoder_coord2RegionCode
  * https://apis.map.kakao.com/web/sample/multipleMarkerImage/
  */
-function useKakaoMap({ mapRef, markerPositions = [DEFAULT_POSITION, DEFAULT_POSITION] }: IKakaoMapProps) {
+function useKakaoMap({
+  mapRef,
+  markerPositions = [DEFAULT_POSITION, DEFAULT_POSITION],
+}: IKakaoMapProps) {
   const [kakaoMap, setKakaoMap] = useState<kakao.maps.Map>();
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder>();
   const [jibunAddressName, setjibunAddressName] = useState('');
@@ -42,21 +45,19 @@ function useKakaoMap({ mapRef, markerPositions = [DEFAULT_POSITION, DEFAULT_POSI
   useEffect(() => {
     const script = document.getElementById('kakao-map-sdk');
     if (script != null) {
-      script.onload = () => {
-        kakao.maps.load(() => {
-          const position = new kakao.maps.LatLng(...DEFAULT_POSITION);
-          const options = {
-            center: position,
-            level: 3,
-          };
-          if (mapRef.current) {
-            const map = new kakao.maps.Map(mapRef.current, options);
-            setKakaoMap(map);
-            // 주소-좌표 변환 객체를 생성합니다
-            setGeocoder(new kakao.maps.services.Geocoder());
-          }
-        });
-      };
+      kakao.maps.load(() => {
+        const position = new kakao.maps.LatLng(...DEFAULT_POSITION);
+        const options = {
+          center: position,
+          level: 3,
+        };
+        if (mapRef.current) {
+          const map = new kakao.maps.Map(mapRef.current, options);
+          setKakaoMap(map);
+          // 주소-좌표 변환 객체를 생성합니다
+          setGeocoder(new kakao.maps.services.Geocoder());
+        }
+      });
     }
   }, [mapRef]);
 
@@ -80,8 +81,9 @@ function useKakaoMap({ mapRef, markerPositions = [DEFAULT_POSITION, DEFAULT_POSI
       removeMarkers();
       setMarkers(
         positions.map((position, idx) => {
-          const imageSrc = `/src/assets/mb_ic_${idx === 0 ? 'user_gps' : 'place'
-            }_position.svg`;
+          const imageSrc = `/src/assets/mb_ic_${
+            idx === 0 ? 'user_gps' : 'place'
+          }_position.svg`;
           const imageSize = new kakao.maps.Size(30, 33);
           const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
