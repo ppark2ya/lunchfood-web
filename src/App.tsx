@@ -11,6 +11,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useComponentWillMount(() => {
+    const script = document.createElement('script');
+    script.id = 'kakao-map-sdk';
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
+      import.meta.env.VITE_KAKAO_API_KEY
+    }&autoload=false&libraries=services,drawing,clusterer`;
+    document.head.appendChild(script);
+
     apiClient.interceptors.request.use(
       function (config) {
         const { url } = config;
@@ -37,19 +44,6 @@ function App() {
       },
     );
   });
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.id = 'kakao-map-sdk';
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
-      import.meta.env.VITE_KAKAO_API_KEY
-    }&autoload=false&libraries=services,drawing,clusterer`;
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
 
   const MountedComponent = useMemo(
     () =>
