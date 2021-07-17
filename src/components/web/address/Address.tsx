@@ -6,7 +6,9 @@ import useInput from 'hooks/useInput';
 import ModalPortal from 'components/web/modal/portal/ModalPortal';
 import useAddress from 'hooks/useAddress';
 import AddressList from 'components/common/AddressList';
-import isEmpty from 'utils/isEmpty';
+import MyLocation from './MyLocation';
+import { DEFAULT_POSITION, LatLng } from 'Constants';
+import getGeoLocation, { geoLocationClear } from 'utils/getGeoLocation';
 
 const StyledAddress = styled.main`
   .main-section {
@@ -60,10 +62,6 @@ const StyledAddress = styled.main`
     & > div:first-child {
       width: 520px;
     }
-    & > div:last-child {
-      width: 52px;
-      margin-left: 8px;
-    }
   }
 
   .mycoord-section {
@@ -83,9 +81,16 @@ const StyledModal = styled.div`
   align-items: center;
   justify-content: center;
 
-  .modal-contents {
+  .modal-contents-addresslist {
     background: white;
     height: 50vh;
+    overflow-y: auto;
+    border-radius: ${(props) => props.theme.border.radius};
+  }
+
+  .modal-contents-mylocation {
+    width: 800px;
+    background: white;
     overflow-y: auto;
     border-radius: ${(props) => props.theme.border.radius};
   }
@@ -94,25 +99,55 @@ const StyledModal = styled.div`
 function Address() {
   const [value, onChange, onClear] = useInput('');
   const [isShow, setIsShow] = useState(false);
-  const {
-    addressRoadItems,
-    asyncGetAddressList,
-    onAddressClick,
-  } = useAddress();
+  const { addressRoadItems, asyncGetAddressList, onAddressClick } =
+    useAddress();
+  const [modalType, setModalType] = useState('');
+  const [shouldKakaoMap, setShouldKakaoMap] = useState(false);
+  const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
 
   const toggleModal = useCallback(() => {
     setIsShow((prev) => !prev);
   }, []);
 
+  useEffect(() => {
+    const watchId = getGeoLocation(function (position: GeolocationPosition) {
+      const {
+        coords: { latitude, longitude },
+      } = position;
+      setUserCoord([latitude, longitude]);
+      setShouldKakaoMap(true);
+    });
+    () => geoLocationClear(watchId);
+  }, []);
+
+  const onAddressSearchClick = useCallback(() => {
+    if (shouldKakaoMap) {
+      setModalType('myloction');
+      toggleModal();
+    } else {
+      window.alert('위치 권한이 없습니다.');
+    }
+  }, [shouldKakaoMap, userCoord]);
+
   const modal = useMemo(
     () => (
       <ModalPortal>
         <StyledModal>
-          <div className="modal-contents">
-            <AddressList
-              items={addressRoadItems}
-              onAddressClick={onAddressClick}
-            />
+          <div
+            className={
+              modalType == 'search'
+                ? 'modal-contents-addresslist'
+                : 'modal-contents-mylocation'
+            }
+          >
+            {modalType == 'search' ? (
+              <AddressList
+                items={addressRoadItems}
+                onAddressClick={onAddressClick}
+              />
+            ) : (
+              <MyLocation userCoord={userCoord} />
+            )}
           </div>
         </StyledModal>
       </ModalPortal>
@@ -127,7 +162,7 @@ function Address() {
         <span className="title">
           <strong>점심 고민</strong>은 이제 그만!!
         </span>
-        <img className="app-name" src="src/assets/img_address_appname.png" />
+        <img className="app-name" src="../src/assets/img_address_appname.png" />
         <span className="border-line" />
         <div className="search-section">
           <Input
@@ -137,12 +172,15 @@ function Address() {
             onChange={onChange}
             onClear={onClear}
             onClick={() => {
+              setModalType('search');
               asyncGetAddressList(value, toggleModal);
             }}
           />
         </div>
         <div className="mycoord-section">
-          <Button componentType="enable">내 위치로 검색하기</Button>
+          <Button componentType="enable" onClick={onAddressSearchClick}>
+            내 위치로 검색하기
+          </Button>
         </div>
       </div>
     </StyledAddress>

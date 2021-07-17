@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import Button from 'components/common/Button';
+import { useLocation } from 'react-router-dom';
+import useKakaoMap from 'hooks/useKakaoMap';
+import useRecommend from 'hooks/useRecommend';
+import { DEFAULT_POSITION, LatLng } from 'Constants';
+import { ReactComponent as TodayMenuIcon } from 'assets/mb_ic_today_menu.svg';
+import isEmpty from 'utils/isEmpty';
+import { BestMenu } from 'api/types';
+import { Location } from 'history';
 
 const StyledRecommend = styled.main`
   .mainsection {
@@ -154,33 +162,138 @@ const StyledRecommend = styled.main`
   }
 `;
 
+const CancelButton = styled(Button)<{ only: boolean }>`
+  width: ${(props) => (props.only ? '48%' : '100%')};
+  margin-right: ${(props) => (props.only ? '3vw' : 0)};
+`;
+
+const mapSize = {
+  height: '70vh',
+};
+
 function Recommend() {
+  const location: Location<{ latlng: LatLng }> = useLocation();
+  const mapRef = useRef<HTMLDivElement>(null);
+  const [currentMenu, setCurrentMenu] = useState<BestMenu>();
+  const [currentMenuIndex, setCurrentMenuIndex] = useState(0);
+  const [isChoice, setIsChoice] = useState(false);
+  const [userCoord, setUserCoord] = useState<LatLng>(DEFAULT_POSITION);
+  const [markerPositions, setMarkerPositions] = useState<LatLng[]>([]);
+  useKakaoMap({ mapRef, markerPositions });
+  const { bestMenuList, asyncGetBestMenuList, asyncInsertHistory } =
+    useRecommend();
+  const { id } = localStorage;
+
+  useEffect(() => {
+    asyncGetBestMenuList({
+      id,
+      interval_date: 3,
+    });
+  }, [id]);
+
+  useEffect(() => {
+    if (location.state?.latlng) {
+      setUserCoord(location.state.latlng);
+      setMarkerPositions([location.state.latlng]);
+    }
+  }, [location.state?.latlng]);
+
+  useEffect(() => {
+    if (!isEmpty(bestMenuList)) {
+      setCurrentMenu(bestMenuList!![currentMenuIndex]);
+    }
+  }, [bestMenuList, currentMenuIndex]);
+
+  useEffect(() => {
+    if (currentMenu) {
+      setMarkerPositions([[...userCoord], [currentMenu.y, currentMenu.x]]);
+    }
+  }, [currentMenu, userCoord]);
+
+  const onReject = useCallback(() => {
+    if (currentMenu) {
+      setIsChoice(true);
+      setCurrentMenuIndex((prev) => prev + 1);
+      asyncInsertHistory({
+        id,
+        place_id: currentMenu.id,
+        place_name: currentMenu.place_name,
+        category_name: currentMenu.category_name,
+        good_bad: 0,
+        x: currentMenu.x,
+        y: currentMenu.y,
+      });
+    }
+  }, [id, currentMenu]);
+
+  const onChoice = useCallback(() => {
+    if (currentMenu) {
+      setIsChoice(false);
+      asyncInsertHistory({
+        id,
+        place_id: currentMenu.id,
+        place_name: currentMenu.place_name,
+        category_name: currentMenu.category_name,
+        good_bad: 1,
+        x: currentMenu.x,
+        y: currentMenu.y,
+      });
+    }
+  }, [id, currentMenu]);
+
   return (
     <StyledRecommend>
-      {/* TO-DO : TEST VAULE REPLACE */}
       <div className="mainsection">
-        <div className="mapsection">
-          <h1>TO-DO : KAKAO MAP SECTION</h1>
-        </div>
+        <div className="mapsection" ref={mapRef} style={mapSize}></div>
         <div className="functionsection">
           <span className="title">
             <strong>점심 고민</strong>은 이제 그만!!
           </span>
-          <img className="appname" src="src/assets/img_address_appname.png" />
-          <div id="recommendmenu">톤쇼우</div>
+          <img
+            className="appname"
+            src="../src/assets/img_address_appname.png"
+          />
+          <div id="recommendmenu">{currentMenu?.place_name}</div>
           <span className="borderline" />
           <div className="storesection">
             <span className="recommendlabel">식당</span>
-            <span id="recommendstore">톤쇼우 광안리점</span>
+            <span id="recommendstore">{currentMenu?.address_name}</span>
           </div>
           <div className="distancesection">
             <span className="recommendlabel">거리</span>
-            <span id="recommenddistance">162m</span>
-            <a id="viewmapbtn">지도보기</a>
+            <span id="recommenddistance">{`${
+              currentMenu?.distance || 0
+            }m`}</span>
+            <a
+              id="viewmapbtn"
+              onClick={() => {
+                window.open(currentMenu?.place_url, '_blank');
+              }}
+            >
+              지도보기
+            </a>
           </div>
           <div className="btnsection">
-            <button id="otherrecommendbtn">다른추천</button>
-            <Button componentType="enable">선택</Button>
+            <CancelButton
+              componentType="cancel"
+              onClick={onReject}
+              only={isChoice}
+            >
+              다른추천
+            </CancelButton>
+            {isChoice && (
+              <Button
+                componentType={
+                  bestMenuList?.length === currentMenuIndex
+                    ? 'disable'
+                    : 'enable'
+                }
+                width="48%"
+                onClick={onChoice}
+              >
+                선택
+              </Button>
+            )}
           </div>
         </div>
       </div>
