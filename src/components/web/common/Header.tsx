@@ -17,6 +17,7 @@ const StyledHeader = styled.header`
     width: 200px;
     height: 28px;
     margin-left: calc(360 / 1920 * 100%);
+    background: url(/src/assets/img_gnb_title.png) no-repeat 85% 50%;
   }
 
   .item {
@@ -52,14 +53,14 @@ const StyledHeader = styled.header`
 function Header() {
   return (
     <StyledHeader>
-      <img className="logo" src="src\assets\img_gnb_title.png" />
+      <Link className="logo" to="/main/recommend" />
       <Link className="item" to="/address">
         위치설정
       </Link>
-      <Link className="item" to="/history">
+      <Link className="item" to="/main/history">
         식사기록
       </Link>
-      <Link className="item" to="/filter">
+      <Link className="item" to="/main/filter">
         내 점심줄
       </Link>
     </StyledHeader>
