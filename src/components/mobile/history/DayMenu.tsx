@@ -7,9 +7,8 @@ import Input from 'components/common/Input';
 import useDayHistory from 'hooks/useDayHistory';
 import { useHistory } from 'react-router-dom';
 import Button from 'components/common/Button';
-import useLocalStorage from 'hooks/useLocalStorage';
-import { useRecoilValue } from 'recoil';
-import { placeNameState, menuNameState } from 'store/recoil/history/state';
+import { useRecoilState } from 'recoil';
+import { historyDayMenuState } from 'store/recoil/history/state';
 
 const Container = styled.form`
   padding: 4vw;
@@ -48,31 +47,31 @@ const Container = styled.form`
   }
 `;
 
-interface IDayMenuProps {
-  placeId: number;
-  placeName?: string;
-  menuName?: string;
-  menuDiary?: string;
-  score?: number;
-  insertedDate?: string;
-}
-
 function DayMenu() {
   const history = useHistory();
-  const placeNameRecoilState = useRecoilValue(placeNameState);
-  const menuNameRecoilState = useRecoilValue(menuNameState);
-  const [diary, setDiary] = useLocalStorage('diary', '');
+  const [historyDayMenuRecoilState, setHistoryDayMenuRecoilState] =
+    useRecoilState(historyDayMenuState);
   const { asyncInsertDayMenu } = useDayHistory();
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setDiary(event.target.value);
+      setHistoryDayMenuRecoilState((daymenu) => ({
+        ...daymenu,
+        menu_diary: event.target.value,
+      }));
     },
     [],
   );
 
   const onBackClick = useCallback(() => {
     history.push('/main/history');
+  }, []);
+
+  const onScoreIconClick = useCallback((index: number) => {
+    setHistoryDayMenuRecoilState((daymenu) => ({
+      ...daymenu,
+      score: index.toString(),
+    }));
   }, []);
 
   const onPlaceSearchPage = useCallback(() => {
@@ -88,35 +87,49 @@ function DayMenu() {
     history.push('/main/history/food_search');
   }, []);
 
+  let convertDateString = '';
+  if (historyDayMenuRecoilState.inserted_date !== '') {
+    const [yyyy, MM, dd] = historyDayMenuRecoilState.inserted_date.split('-');
+    convertDateString = `${yyyy}년 ${MM}월 ${dd}일의 메뉴`;
+  }
+
   return (
     <div>
       <Header onBackClick={onBackClick}>데이메뉴 등록</Header>
       <Container>
-        <div className="history-date">2021년 7월 13일의 메뉴</div>
+        <div className="history-date">{convertDateString}</div>
         <hr />
         <div className="score">
           불꽃점수
-          {new Array(5)
-            .fill(0)
-            .map((_, idx) =>
-              idx < 3 ? (
-                <FireCheckedIcon key={idx} />
-              ) : (
-                <FireUnCheckedIcon key={idx} />
-              ),
-            )}
+          {new Array(5).fill(0).map((_, idx) =>
+            idx < Number(historyDayMenuRecoilState.score) ? (
+              <FireCheckedIcon
+                key={idx}
+                onClick={() => {
+                  onScoreIconClick(idx + 1);
+                }}
+              />
+            ) : (
+              <FireUnCheckedIcon
+                key={idx}
+                onClick={() => {
+                  onScoreIconClick(idx + 1);
+                }}
+              />
+            ),
+          )}
         </div>
         <hr />
         <Input
           mode="view"
-          value={placeNameRecoilState}
+          value={historyDayMenuRecoilState.place_name ?? ''}
           label="음식점"
           onClick={onPlaceSearchPage}
         />
         <hr />
         <Input
           mode="view"
-          value={menuNameRecoilState}
+          value={historyDayMenuRecoilState.menu_name ?? ''}
           label="음식종류"
           onClick={onFoodSearchPage}
         />
@@ -127,21 +140,14 @@ function DayMenu() {
           rows={7}
           cols={33}
           style={{ display: 'block', width: '100%' }}
-          value={diary}
+          value={historyDayMenuRecoilState.menu_diary ?? ''}
           onChange={onChange}
         />
         <Button
           componentType="enable"
           onClick={() => {
             asyncInsertDayMenu({
-              id: localStorage.id, // 사용자 id
-              place_id: 0, // 카카오 api에서 넘어온 식당 식별자(BestMenu.id)
-              place_name: placeNameRecoilState, // 식당이름
-              menu_name: menuNameRecoilState, // 음식명
-              category: placeNameRecoilState, // 식당종류
-              score: '', // 평점
-              menu_diary: diary, // 짧은 글
-              inserted_date: '',
+              ...historyDayMenuRecoilState,
             });
           }}
         >

@@ -8,7 +8,7 @@ import Input from 'components/common/Input';
 import useInput from 'hooks/useInput';
 import FoodItem from './FoodItem';
 import { useSetRecoilState } from 'recoil';
-import { menuNameState } from 'store/recoil/history/state';
+import { historyDayMenuState } from 'store/recoil/history/state';
 
 const Container = styled.div`
   padding: 4vw;
@@ -18,11 +18,14 @@ function FoodSearch() {
   const history = useHistory();
   const [value, onChange, onClear] = useInput('');
   const foodList = useDebounceEffect(getFoodAuto, value) as string[];
-  const setMenuNameRecoilState = useSetRecoilState(menuNameState);
+  const historyDayMenuRecoilState = useSetRecoilState(historyDayMenuState);
 
   const onItemClick = useCallback((event: MouseEvent<HTMLDivElement>) => {
     const foodName = (event.target as any).textContent;
-    setMenuNameRecoilState(foodName);
+    historyDayMenuRecoilState((historyDayMenu) => ({
+      ...historyDayMenu,
+      menu_name: foodName,
+    }));
     history.replace({
       pathname: '/main/history/dayMenu',
     });

@@ -11,7 +11,7 @@ import AddressItem from 'components/common/AddressItem';
 import { PlaceInfo } from 'api/types';
 import { Location } from 'history';
 import { useSetRecoilState } from 'recoil';
-import { placeNameState } from 'store/recoil/history/state';
+import { historyDayMenuState } from 'store/recoil/history/state';
 
 const Container = styled.div`
   padding: 4vw;
@@ -23,7 +23,7 @@ function PlaceSearch() {
   const { asyncInsertSelectedPlace } = useFilter();
   const [value, onChange, onClear] = useInput('');
   const placeInfoList = useDebounceEffect(getPlaceAuto, value) as PlaceInfo[];
-  const setPlaceNameRecoilState = useSetRecoilState(placeNameState);
+  const historyDayMenuRecoilState = useSetRecoilState(historyDayMenuState);
 
   const addressItems = placeInfoList?.map((placeInfo) => (
     <AddressItem
@@ -32,7 +32,10 @@ function PlaceSearch() {
       roadAddr={placeInfo.road_address_name}
       onAddressClick={() => {
         if (location.state?.from) {
-          setPlaceNameRecoilState(placeInfo.place_name);
+          historyDayMenuRecoilState((historyDayMenu) => ({
+            ...historyDayMenu,
+            place_name: placeInfo.place_name,
+          }));
           history.replace({
             pathname: location.state.from,
           });
