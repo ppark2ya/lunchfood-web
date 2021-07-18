@@ -56,7 +56,7 @@ const CancelButton = styled(Button)<{ only: boolean }>`
 `;
 
 const mapSize = {
-  height: '45vh',
+  height: '40vh',
 };
 function Recommend() {
   const location: Location<{ latlng: LatLng }> = useLocation();

@@ -43,22 +43,19 @@ function useKakaoMap({
    * 사용자 위치 기반으로 카카오맵 로드
    */
   useEffect(() => {
-    const script = document.getElementById('kakao-map-sdk');
-    if (script != null) {
-      kakao.maps.load(() => {
-        const position = new kakao.maps.LatLng(...DEFAULT_POSITION);
-        const options = {
-          center: position,
-          level: 3,
-        };
-        if (mapRef.current) {
-          const map = new kakao.maps.Map(mapRef.current, options);
-          setKakaoMap(map);
-          // 주소-좌표 변환 객체를 생성합니다
-          setGeocoder(new kakao.maps.services.Geocoder());
-        }
-      });
-    }
+    kakao.maps.load(() => {
+      const position = new kakao.maps.LatLng(...DEFAULT_POSITION);
+      const options = {
+        center: position,
+        level: 3,
+      };
+      if (mapRef.current) {
+        const map = new kakao.maps.Map(mapRef.current, options);
+        setKakaoMap(map);
+        // 주소-좌표 변환 객체를 생성합니다
+        setGeocoder(new kakao.maps.services.Geocoder());
+      }
+    });
   }, [mapRef]);
 
   const removeMarkers = useCallback(() => {
@@ -85,7 +82,10 @@ function useKakaoMap({
             idx === 0 ? 'user_gps' : 'place'
           }_position.svg`;
           const imageSize = new kakao.maps.Size(30, 33);
-          const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+          const markerImage = new kakao.maps.MarkerImage(
+            imageSrc as any,
+            imageSize,
+          );
 
           return new kakao.maps.Marker({
             map: kakaoMap,
